@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS281 Study Guide — Slides 1–145</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Source+Sans+3:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap');
+
+  :root {
+    --bg:        #0f0f13;
+    --surface:   #17171f;
+    --surface2:  #1e1e2a;
+    --border:    #2a2a38;
+    --text:      #e8e8f0;
+    --muted:     #7a7a96;
+    --blue:      #7eb8f7;
+    --green:     #5ecf87;
+    --orange:    #f4a45a;
+    --purple:    #b39ddb;
+    --red:       #f77f7f;
+    --teal:      #56cfc0;
+    --gold:      #f0c040;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(160deg, #0f0f13 0%, #1a1528 50%, #0f0f13 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%; transform: translateX(-50%);
+    width: 700px; height: 300px;
+    background: radial-gradient(ellipse, rgba(179,157,219,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(179,157,219,0.1);
+    border: 1px solid rgba(179,157,219,0.3);
+    color: var(--purple);
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 5vw, 46px);
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto 28px;
+  }
+  .toc-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  .toc-pills a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'Fira Code', monospace;
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: all 0.15s;
+  }
+  .toc-pills a:hover { color: var(--purple); border-color: rgba(179,157,219,0.4); }
+
+  /* ── MAIN ── */
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 52px 32px 88px;
+  }
+
+  /* ── CHAPTER ── */
+  .chapter { margin-bottom: 80px; }
+  .ch-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 38px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ch-tag {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--purple);
+    background: rgba(179,157,219,0.08);
+    border: 1px solid rgba(179,157,219,0.2);
+    padding: 6px 11px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  .ch-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .ch-header .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+  /* ── TOPIC ── */
+  .topic { margin-bottom: 44px; }
+  .topic h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    color: var(--blue);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .sref {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-style: normal;
+  }
+  .topic p, .topic li { color: #cacad8; margin-bottom: 10px; }
+  .topic ul, .topic ol { padding-left: 22px; }
+  .topic li { margin-bottom: 6px; }
+  strong { color: var(--text); }
+
+  /* ── EXAMPLES ── */
+  .ex-section { margin-top: 22px; }
+  .ex-label {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--green);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ex-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(94,207,135,0.18);
+  }
+  .ex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .ex-card .ex-n {
+    font-family: 'Fira Code', monospace;
+    font-size: 10px;
+    color: var(--green);
+    font-weight: 500;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .ex-card p { color: #cacad8; margin: 0; font-size: 15px; }
+
+  /* ── CALLOUTS ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 14.5px;
+  }
+  .callout-icon { font-size: 19px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 14px; }
+  .callout-body p { margin: 0; opacity: 0.9; color: inherit; }
+  .callout.key  { background: rgba(240,192,64,0.07);  border: 1px solid rgba(240,192,64,0.25);  color: var(--gold); }
+  .callout.tip  { background: rgba(94,207,135,0.07);  border: 1px solid rgba(94,207,135,0.22);  color: var(--green); }
+  .callout.info { background: rgba(126,184,247,0.07); border: 1px solid rgba(126,184,247,0.22); color: var(--blue); }
+  .callout.warn { background: rgba(244,164,90,0.07);  border: 1px solid rgba(244,164,90,0.22);  color: var(--orange); }
+  .callout.note { background: rgba(179,157,219,0.07); border: 1px solid rgba(179,157,219,0.22); color: var(--purple); }
+
+  /* ── CODE ── */
+  .code {
+    background: #0a0a0f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'Fira Code', monospace;
+    font-size: 13px;
+    color: #e8e8f0;
+    overflow-x: auto;
+    margin: 16px 0;
+    white-space: pre;
+    line-height: 1.65;
+  }
+  .kw  { color: var(--red); }
+  .fn  { color: var(--blue); }
+  .str { color: var(--green); }
+  .cm  { color: var(--muted); font-style: italic; }
+  .num { color: var(--teal); }
+  .op  { color: var(--orange); }
+
+  /* ── DIAGRAM ── */
+  .diagram {
+    background: #0a0a0f;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: 'Fira Code', monospace;
+    font-size: 12.5px;
+    color: var(--teal);
+    overflow-x: auto;
+    margin: 16px 0;
+    line-height: 1.9;
+    white-space: pre;
+  }
+
+  /* ── TABLE ── */
+  .tbl {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+  .tbl th {
+    background: var(--surface2);
+    color: var(--blue);
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .tbl td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: #cacad8;
+    vertical-align: top;
+  }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(255,255,255,0.02); }
+  .good { color: var(--green); }
+  .bad  { color: var(--red); }
+  .ok   { color: var(--orange); }
+
+  /* ── DIVIDER ── */
+  hr.div { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  /* ── HIGHLIGHTS ── */
+  .hl   { color: var(--gold);   font-weight: 600; }
+  .hlb  { color: var(--blue);   font-weight: 600; }
+  .hlg  { color: var(--green);  font-weight: 600; }
+  .hlr  { color: var(--red);    font-weight: 600; }
+  .hlp  { color: var(--purple); font-weight: 600; }
+  .hlt  { color: var(--teal);   font-weight: 600; }
+
+  /* ── SUMMARY BOX ── */
+  .summary {
+    background: linear-gradient(135deg, rgba(126,184,247,0.05), rgba(179,157,219,0.05));
+    border: 1px solid rgba(126,184,247,0.18);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .summary h4 {
+    color: var(--purple);
+    font-family: 'Fira Code', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .summary ul { padding-left: 20px; }
+  .summary li { color: #cacad8; margin-bottom: 6px; font-size: 14.5px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">CS281 · Bilkent University · Dr. Mustafa Değerli</div>
+  <h1>Computer &amp; Data Organization<br>Study Guide — Slides 1–145</h1>
+  <p>Everything from Databases &amp; ER diagrams to SQL &amp; Relational Algebra, explained from absolute scratch with at least 3 examples per topic.</p>
+  <div class="toc-pills">
+    <a href="#ch1">Ch.1 Intro to DBMS</a>
+    <a href="#ch2">Ch.2 ER Model</a>
+    <a href="#ch3">Ch.3 Relational Model</a>
+    <a href="#ch4">Ch.4 Rel. Algebra</a>
+    <a href="#ch5">Ch.5 Rel. Calculus</a>
+    <a href="#ch6">Ch.6 SQL</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ════════════════════════════════════════
+     CHAPTER 1 — Introduction to DBMS
+════════════════════════════════════════ -->
+<section class="chapter" id="ch1">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 1 · Slides 1–17</div>
+    <div>
+      <h2>Introduction to Database Systems</h2>
+      <div class="sub">What is a DBMS, why use one, architecture, data independence</div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>What Is a DBMS? <span class="sref">Slides 2–4</span></h3>
+    <p>A <span class="hl">Database Management System (DBMS)</span> is a software system designed to store, manage, and retrieve very large amounts of data efficiently and safely. Think of it as a super-powered filing cabinet that millions of people can use at the same time without stepping on each other's toes — and that can recover from a power outage without losing any data.</p>
+    <p>A database <span class="hlb">models real-world enterprises</span>: it stores <strong>entities</strong> (things that exist — like students, courses, employees) and <strong>relationships</strong> between them (e.g., "Madonna is enrolled in CS281").</p>
+    <p><strong>Why not just use files (like Excel or text files)?</strong> Files give you nothing for free. You'd have to write your own code for: concurrent access, crash recovery, security, efficient search, and keeping data consistent. The DBMS handles all of this.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — University database</div>
+        <p>Bilkent's student system is a database. It stores Students, Courses, Enrollments, Professors, Grades. When thousands of students log in to see their grades at the same time, the DBMS handles all those simultaneous requests without returning wrong data to anyone.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Banking system</div>
+        <p>When you use an ATM, a bank's DBMS handles your transaction. If two people simultaneously withdraw from the same account, the DBMS ensures neither transaction interferes with the other — you can't both withdraw more money than exists. If the ATM crashes mid-transaction, the DBMS rolls back as if it never happened.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — File system problems</div>
+        <p>Imagine storing student grades in a text file. Problem 1: If two professors update grades at the same moment, one update gets lost. Problem 2: If the computer crashes while writing, the file is half-written and corrupted. Problem 3: To find all students with GPA &gt; 3.5, your code must read every line. A DBMS solves all three with no custom code from you.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Levels of Abstraction <span class="sref">Slides 7–9</span></h3>
+    <p>A DBMS provides three levels of abstraction, allowing different people to see the database differently without affecting each other:</p>
+
+    <table class="tbl">
+      <tr><th>Level</th><th>What It Is</th><th>Who Uses It</th><th>Example</th></tr>
+      <tr>
+        <td><strong>Physical Schema</strong></td>
+        <td>How data is actually stored on disk — which files, which indexes, which pages.</td>
+        <td>DBA (database administrator)</td>
+        <td>"Students stored as unsorted heap file; B+ tree index on sid."</td>
+      </tr>
+      <tr>
+        <td><strong>Conceptual Schema</strong></td>
+        <td>The logical structure — what tables exist, what columns they have, what constraints hold.</td>
+        <td>Developers, DBAs</td>
+        <td>Students(sid, name, login, age, gpa), Enrolled(sid, cid, grade)</td>
+      </tr>
+      <tr>
+        <td><strong>External Schema (View)</strong></td>
+        <td>A customized "window" into the database for specific users — shows only what they need.</td>
+        <td>End users, applications</td>
+        <td>A student sees only their own grades. A professor sees the class roster.</td>
+      </tr>
+    </table>
+
+    <div class="callout key">
+      <div class="callout-icon">🔑</div>
+      <div class="callout-body">
+        <strong>Data Independence</strong>
+        <p><strong>Physical independence</strong>: Change how data is stored on disk (e.g., add an index, switch disk format) without changing any application code. <strong>Logical independence</strong>: Add a new column to a table without breaking applications that don't use that column. This is one of the biggest wins of using a DBMS.</p>
+      </div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Physical independence</div>
+        <p>The database administrator decides to add a B+ tree index to the Students table to make searches faster. Zero lines of application code change — the application still says "SELECT * FROM Students WHERE gpa &gt; 3.5" and gets the same result, just faster. The app doesn't know or care how data is physically stored.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Logical independence</div>
+        <p>The DBA adds a new column "phone_number" to the Students table. Existing applications that only query sid, name, and gpa continue working without any modification — they just get back the same columns they always did.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Views for security</div>
+        <p>HR database: The full Employees table has salary, SSN, performance rating. A manager's view only shows employee names and departments. A payroll clerk's view shows only name and salary. Neither can see the other's data. Each "sees" a different, safe subset of the same underlying table.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>DBMS Architecture — Layered System <span class="sref">Slide 16</span></h3>
+    <p>A DBMS is built in layers, like an onion. Each layer uses the services of the one below it and provides services to the one above:</p>
+
+    <div class="diagram">TOP: User/Application
+    ↕
+Query Optimization & Execution     ← Finds the fastest way to run a query
+    ↕
+Relational Operators               ← Executes joins, selects, projects
+    ↕
+Files & Access Methods             ← Reads/writes pages from/to disk
+    ↕
+Buffer Management                  ← Caches disk pages in RAM
+    ↕
+Disk Space Management              ← Allocates space on the physical disk
+    ↕
+BOTTOM: Physical Disk</div>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — A SELECT query's journey</div>
+        <p>You type: SELECT name FROM Students WHERE gpa &gt; 3.5. The query optimizer (top layer) decides whether to use an index or scan the file. It tells the relational operator layer to execute a "selection." That layer asks the file/access layer for the right pages. The buffer manager checks if those pages are already in RAM. If not, disk space management fetches them. Data bubbles back up to you.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Buffer management analogy</div>
+        <p>The buffer manager is like your desk while working in a library. You don't want to walk to the shelves every time you need a page — instead you keep frequently-needed books on your desk (in RAM). The buffer manager decides which pages to keep "on the desk" and which to send back to the shelves (disk).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Concurrency and recovery are everywhere</div>
+        <p>Notice the slide says concurrency control and recovery span ALL layers. When you read a page (buffer layer), you may need a lock. When you write a page (disk layer), you must write a log record first. These concerns don't live in just one layer — they cut across the entire system.</p>
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>📋 Chapter 1 Summary</h4>
+      <ul>
+        <li>A DBMS stores large datasets and handles concurrency, crash recovery, security, and efficient querying — so you don't have to.</li>
+        <li>Three levels: Physical (how stored), Conceptual (what exists), External (what users see).</li>
+        <li>Data independence = change physical/logical structure without breaking applications.</li>
+        <li>A DBMS has a layered architecture: disk → buffer → files → operators → optimizer.</li>
+        <li>Concurrency control and logging run through all layers.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     CHAPTER 2 — The ER Model
+════════════════════════════════════════ -->
+<section class="chapter" id="ch2">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 2 · Slides 18–35</div>
+    <div>
+      <h2>The Entity-Relationship Model</h2>
+      <div class="sub">Entities, Relationships, Keys, ISA, Weak Entities, Aggregation, ER-to-Relational</div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>ER Model Basics — Entities and Relationships <span class="sref">Slides 19–22</span></h3>
+    <p>The <span class="hl">ER Model</span> is a visual way to design a database before writing any code. You sketch out the "things" that exist in your system and how they relate to each other. It's the blueprint before you build the house.</p>
+    <ul>
+      <li><span class="hlb">Entity</span>: A real-world "thing" that is distinguishable from other things. Examples: a student, a course, an employee, a book.</li>
+      <li><span class="hlb">Entity Set</span>: A collection of similar entities. Like a class of all students. All entities in a set share the same attributes.</li>
+      <li><span class="hlb">Attribute</span>: A property of an entity. For a student: name, age, GPA, student ID. Each attribute has a domain (allowed values).</li>
+      <li><span class="hlb">Key</span>: One or more attributes that uniquely identify an entity within its entity set. For students, the student ID (ssn/sid) is a key.</li>
+      <li><span class="hlb">Relationship</span>: An association between entities. "Attishoo works in the Pharmacy department."</li>
+      <li><span class="hlb">Relationship Set</span>: A collection of similar relationships. "Works_In" is a relationship set connecting all (employee, department) pairs.</li>
+    </ul>
+
+    <div class="callout info">
+      <div class="callout-icon">📐</div>
+      <div class="callout-body">
+        <strong>ER Diagram Notation (know this!)</strong>
+        <p>Rectangles = Entity sets. Ovals = Attributes. Diamonds = Relationship sets. Lines connect them. Underlined attributes = key attributes. Double rectangles/diamonds = weak entities and identifying relationships.</p>
+      </div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — University ER</div>
+        <p>Entity sets: <strong>Students</strong> (attributes: sid, name, login, age, gpa) and <strong>Courses</strong> (cid, cname, credits). Relationship: <strong>Enrolled</strong> (which students are in which courses, with descriptive attribute: grade). The "grade" lives on the relationship, not on either entity — it only makes sense in the context of a specific student AND a specific course.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Employee company ER</div>
+        <p>Entity sets: <strong>Employees</strong> (ssn, name, lot) and <strong>Departments</strong> (did, dname, budget). Relationships: <strong>Works_In</strong> (employee works in department, descriptive attribute: since) and <strong>Manages</strong> (one manager per department, descriptive attribute: since). Same entity sets, different relationships!</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Roles in a relationship</div>
+        <p>The <strong>Reports_To</strong> relationship connects Employees to Employees — same entity set appears twice! One instance plays the "supervisor" role, the other plays the "subordinate" role. Roles let one entity set participate multiple times in a relationship.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Key Constraints and Participation Constraints <span class="sref">Slides 23–25</span></h3>
+    <p>Constraints define how many times an entity can participate in a relationship.</p>
+    <ul>
+      <li><span class="hlb">Key constraint (arrow in ER)</span>: An entity set participates in a relationship at most once. "Each department has at most one manager." Arrow points FROM the "one" side.</li>
+      <li><span class="hlb">Participation constraint (thick line)</span>: Every entity in the set must participate in the relationship. "Every department MUST have a manager." Thick line = total participation.</li>
+    </ul>
+
+    <table class="tbl">
+      <tr><th>Relationship Type</th><th>Meaning</th><th>ER Notation</th></tr>
+      <tr><td><strong>One-to-One (1:1)</strong></td><td>Each entity in A maps to at most one in B, and vice versa.</td><td>Arrow on both sides of diamond</td></tr>
+      <tr><td><strong>One-to-Many (1:N)</strong></td><td>One entity in A can relate to many in B, but each B relates to at most one A.</td><td>Arrow on the "one" side</td></tr>
+      <tr><td><strong>Many-to-Many (M:N)</strong></td><td>Entities on both sides can relate to many on the other side.</td><td>No arrows</td></tr>
+    </table>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Works_In is Many-to-Many</div>
+        <p>An employee can work in MANY departments (e.g., half-time in CS, half-time in EE). A department can have MANY employees. No arrows on either side of Works_In. Both entity sets have partial participation (not every employee must work somewhere, not every department must have employees — though in practice they do).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Manages is Many-to-One with total participation</div>
+        <p>Each department has AT MOST ONE manager (key constraint: arrow from Departments to Manages). Also, EVERY department must have a manager (total participation: thick line from Departments to Manages). But a manager can manage at most one department... or can they? If no arrow from Employees, a manager could manage multiple departments.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Marriage analogy</div>
+        <p>Consider a "Married_To" relationship between People. In a monogamous society: One-to-One (each person married to at most one other). Each marriage involves exactly two people. Participation is partial: not everyone is married. If we said "every adult must be married," participation would be total (thick line).</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Weak Entities <span class="sref">Slide 26</span></h3>
+    <p>A <span class="hl">weak entity</span> is an entity that cannot be uniquely identified by its own attributes alone — it depends on a related "owner" entity. Think of dependents (children/spouse) on an employee's insurance policy. A dependent named "John" isn't unique — there could be thousands of Johns. But "John, dependent of employee 12345" is unique.</p>
+    <ul>
+      <li>The weak entity's partial key (called a <strong>discriminator</strong>) uniquely identifies it among the owner's dependents, but not globally.</li>
+      <li>The identifying relationship is always one-to-many (one owner, many weak entities).</li>
+      <li>The weak entity set has total participation in the identifying relationship — it can't exist without its owner.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Dependents on insurance (the slides' example)</div>
+        <p>Entity: <strong>Employees</strong> (key: ssn). Weak Entity: <strong>Dependents</strong> (discriminator: pname = dependent name). A dependent is identified by (ssn of owner, pname). If employee 123-45-6789 is deleted, all their dependents are automatically deleted too (CASCADE). The dependent literally cannot exist without the employee.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Order items</div>
+        <p>An <strong>Order</strong> contains multiple <strong>OrderItems</strong>. An item (Product ID + quantity) only makes sense in the context of a specific order. OrderItem is a weak entity with the Order as its owner. The item's "line number" (1, 2, 3...) is the discriminator — unique within one order, but not globally.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Apartment in building</div>
+        <p>An <strong>Apartment</strong> has a unit number (101, 202, 305). But unit 101 exists in EVERY building — it's not globally unique. The weak entity Apartment gets its identity from (Building_ID, unit_number). Delete the building, all apartments go with it.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>ISA ("Is A") Hierarchies <span class="sref">Slides 27–28</span></h3>
+    <p>ISA hierarchies work exactly like class inheritance in object-oriented programming (like C++ or Java). If A ISA B, every A is also a B, and A inherits all of B's attributes while having additional attributes of its own.</p>
+    <ul>
+      <li><span class="hlb">Overlap constraint</span>: Can an entity be in multiple subclasses at once? "Can Joe be both an Hourly_Emp AND a Contract_Emp?" — the model specifies allowed or disallowed.</li>
+      <li><span class="hlb">Covering constraint</span>: Must every entity in the superclass be in at least one subclass? "Must every Employee be either Hourly or Contract?" — yes or no.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Employee hierarchy (the slides' example)</div>
+        <p>Superclass: <strong>Employees</strong> (ssn, name, lot). Subclass 1: <strong>Hourly_Emps</strong> (inherits ssn/name/lot, adds: hourly_wages, hours_worked). Subclass 2: <strong>Contract_Emps</strong> (inherits ssn/name/lot, adds: contractid). Every Hourly_Emp IS an Employee. But not every Employee needs to be Hourly or Contract (partial covering).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Animal taxonomy</div>
+        <p>Superclass: <strong>Animals</strong> (name, age, weight). Subclass: <strong>Dogs</strong> (adds: breed). Subclass: <strong>Cats</strong> (adds: indoor/outdoor). Every Dog IS an Animal and inherits all Animal attributes. Covering: Maybe not every animal is a dog or cat — covering is not total. Overlap: In this model, an animal can't be both a dog and a cat — disjoint.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Why use ISA?</div>
+        <p>Reason 1: To add attributes specific to a subtype (Hourly_Emps need hours_worked, Contract_Emps don't). Reason 2: To identify entities that participate in specific relationships (only Contract_Emps sign contracts; only Hourly_Emps punch time cards). Without ISA, you'd store null values everywhere — messy and wasteful.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Aggregation <span class="sref">Slide 29</span></h3>
+    <p><span class="hl">Aggregation</span> is used when you need to model a relationship that involves another relationship — treating a relationship set as if it were an entity. This is the trickiest ER concept.</p>
+    <p>Example from slides: Employees <em>monitor</em> the Sponsors relationship between Departments and Projects. You can't just put "Monitors" as a ternary relationship — because "Monitors" has its own attribute (until) and you want to say "each sponsorship is monitored by at most one employee."</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Employee monitors a sponsorship</div>
+        <p>The relationship Sponsors links Departments and Projects. We want to say an Employee monitors a particular (Dept, Project) sponsorship — and track "until when" they monitor it. Solution: Aggregate Sponsors into a box, and draw Monitors as a relationship between Employees and that aggregated box. The sponsorship becomes a "thing" that can be related to.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Doctor reviews a prescription</div>
+        <p>Prescription is a relationship between Doctor and Patient. A PharmacyReviewer reviews specific prescriptions. To model "Reviewer reviews Prescription" — you need aggregation: treat the Prescription relationship as an entity, then have a Reviews relationship from PharmacyReviewer to (aggregated) Prescription.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — When aggregation vs. ternary?</div>
+        <p>Use a ternary relationship when all three entities participate equally with no substructure. Use aggregation when one relationship participates in another relationship AND there's something special about that nested relationship (own attributes, key constraints on participation). Aggregation is richer — it lets you say "at most one employee monitors each sponsorship."</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Design Choices — Entity vs. Attribute, Binary vs. Ternary <span class="sref">Slides 30–34</span></h3>
+    <p>ER design is <span class="hl">subjective</span>. There's often no single correct answer, but there are guidelines that avoid common mistakes.</p>
+
+    <p><strong>Entity vs. Attribute:</strong></p>
+    <ul>
+      <li>If a concept has its own structure (multiple fields, or multiple values per entity) → model as an <strong>entity</strong>.</li>
+      <li>If it's a simple, single-valued property → model as an <strong>attribute</strong>.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Address: entity or attribute?</div>
+        <p>If each employee has exactly one address and you only need it as a string → attribute. If employees can have multiple addresses, or you need to query by city → model Address as an entity (with street, city, country fields) connected by a "LivesAt" relationship. Attributes can't be multi-valued or have sub-structure.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Works_In with time periods</div>
+        <p>If you want to record that an employee worked in a department for multiple periods (Jan–Mar, Sept–Dec), the "from/to" dates can't just be attributes on Works_In — they'd need to repeat. Solution: introduce a <strong>Duration</strong> entity set and make Works_In4 a relationship connecting Employees, Departments, and Duration. Or redesign the relationship itself.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Binary vs. Ternary: Insurance policies</div>
+        <p>Bad design: single ternary relationship Covers(Employee, Policy, Dependent). This says each policy covers each combination of employee and dependent. Better: Two binary relationships — Purchaser(Employee, Policy) and Beneficiary(Dependent, Policy). Why? If each policy is owned by exactly one employee (key constraint), the binary design captures this naturally; the ternary doesn't.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Translating ER Diagrams to Relational Tables <span class="sref">Slides 35–49</span></h3>
+    <p>Once you have an ER diagram, you must convert it to actual relational tables (SQL CREATE TABLE statements). Here are the rules:</p>
+
+    <table class="tbl">
+      <tr><th>ER Construct</th><th>Translation Rule</th></tr>
+      <tr><td><strong>Entity set</strong></td><td>One table. Columns = attributes. Primary key = the key attribute(s).</td></tr>
+      <tr><td><strong>Many-to-Many relationship</strong></td><td>One new table. Columns = keys of each participating entity set (as foreign keys) + descriptive attributes. Primary key = combination of both foreign keys.</td></tr>
+      <tr><td><strong>Key constraint relationship (1:N)</strong></td><td>Option 1: Relationship table where the "one" side's key is the primary key. Option 2: Merge the relationship into the "one" entity's table (usually better).</td></tr>
+      <tr><td><strong>Total participation</strong></td><td>Add NOT NULL constraint on the foreign key column.</td></tr>
+      <tr><td><strong>Weak entity set</strong></td><td>Merge with identifying relationship into one table. Primary key = owner's key + discriminator. Add ON DELETE CASCADE.</td></tr>
+      <tr><td><strong>ISA hierarchy</strong></td><td>Option 1: Superclass table + subclass tables (each with ssn FK + own attrs). Option 2: Just subclass tables with all inherited attrs. Trade-off: Option 1 is better for queries over all employees; Option 2 avoids joins for subclass queries.</td></tr>
+    </table>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Many-to-many: Works_In</div>
+        <div class="code"><span class="kw">CREATE TABLE</span> Works_In (
+  ssn  <span class="fn">CHAR</span>(<span class="num">11</span>),
+  did  <span class="fn">INTEGER</span>,
+  since <span class="fn">DATE</span>,
+  <span class="kw">PRIMARY KEY</span> (ssn, did),          <span class="cm">-- combination is the key</span>
+  <span class="kw">FOREIGN KEY</span> (ssn) <span class="kw">REFERENCES</span> Employees,
+  <span class="kw">FOREIGN KEY</span> (did) <span class="kw">REFERENCES</span> Departments
+);</div>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Key constraint: Manages (merged)</div>
+        <p>Since each department has at most one manager, we can merge Manages into Departments:</p>
+        <div class="code"><span class="kw">CREATE TABLE</span> Dept_Mgr (
+  did    <span class="fn">INTEGER</span>   <span class="kw">PRIMARY KEY</span>,
+  dname  <span class="fn">CHAR</span>(<span class="num">20</span>),
+  budget <span class="fn">REAL</span>,
+  ssn    <span class="fn">CHAR</span>(<span class="num">11</span>) <span class="kw">NOT NULL</span>,  <span class="cm">-- total participation: every dept HAS a manager</span>
+  since  <span class="fn">DATE</span>,
+  <span class="kw">FOREIGN KEY</span> (ssn) <span class="kw">REFERENCES</span> Employees <span class="kw">ON DELETE NO ACTION</span>
+);</div>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Weak entity: Dependents</div>
+        <div class="code"><span class="kw">CREATE TABLE</span> Dep_Policy (
+  pname  <span class="fn">CHAR</span>(<span class="num">20</span>),
+  age    <span class="fn">INTEGER</span>,
+  cost   <span class="fn">REAL</span>,
+  ssn    <span class="fn">CHAR</span>(<span class="num">11</span>) <span class="kw">NOT NULL</span>,
+  <span class="kw">PRIMARY KEY</span> (pname, ssn),    <span class="cm">-- discriminator + owner key</span>
+  <span class="kw">FOREIGN KEY</span> (ssn) <span class="kw">REFERENCES</span> Employees <span class="kw">ON DELETE CASCADE</span>
+  <span class="cm">-- deleting an employee deletes all their dependents</span>
+);</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     CHAPTER 3 — The Relational Model
+════════════════════════════════════════ -->
+<section class="chapter" id="ch3">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 3 · Slides 36–68</div>
+    <div>
+      <h2>The Relational Model</h2>
+      <div class="sub">Relations, Keys, Integrity Constraints, Foreign Keys, SQL DDL, Views</div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>Relations — Tables with Rows and Columns <span class="sref">Slides 37–40</span></h3>
+    <p>In the relational model, <span class="hl">everything is a table</span>. A <strong>relation</strong> has two parts:</p>
+    <ul>
+      <li><span class="hlb">Schema</span>: The structure — name of the table and name + type of each column. Like a blueprint. Written as: Students(sid: string, name: string, login: string, age: integer, gpa: real)</li>
+      <li><span class="hlb">Instance</span>: The actual data — the set of rows (tuples) currently in the table. Changes over time as data is inserted/deleted/updated.</li>
+    </ul>
+    <p>Important terms: <strong>cardinality</strong> = number of rows. <strong>degree (arity)</strong> = number of columns. A relation is a <em>set</em> of tuples — all rows are distinct (no exact duplicates).</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Students table</div>
+        <p>Schema: Students(sid: string, name: string, login: string, age: int, gpa: real). Instance (3 rows, degree 5):</p>
+        <div class="code">sid   | name  | login      | age | gpa
+------+-------+------------+-----+-----
+53666 | Jones | jones@cs   |  18 | 3.4
+53688 | Smith | smith@eecs |  18 | 3.2
+53650 | Smith | smith@math |  19 | 3.8</div>
+        <p>Note: Two "Smiths" — that's fine, name is not a key. But no two rows can have the same sid.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — No ordered rows</div>
+        <p>A relation is a mathematical SET — rows have no inherent order. There is no "first row" or "last row" in the relational model. When you query, the database may return rows in any order unless you specify ORDER BY. This is important: don't rely on insertion order!</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — All columns must be atomic</div>
+        <p>In the pure relational model, every cell contains a single atomic value — no lists, no nested tables, no arrays. You can't store "Smith's courses: {CS281, CS315}" in one cell. Instead, you'd have a separate Enrolled table with one row per (student, course) pair. This is called First Normal Form (1NF) — the most basic requirement of the relational model.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Keys, Superkeys, and Candidate Keys <span class="sref">Slides 41–43</span></h3>
+    <p>A <span class="hl">key</span> is the most important concept in database design. It's a set of attributes that uniquely identifies every row in a table.</p>
+    <ul>
+      <li><span class="hlb">Superkey</span>: Any set of attributes that uniquely identifies rows. {sid, name} is a superkey (no two rows have same sid AND name). But it's redundant — sid alone already does the job.</li>
+      <li><span class="hlb">Candidate key</span>: A MINIMAL superkey. No proper subset of it is also a superkey. {sid} is a candidate key; {sid, name} is not (it's a superkey but not minimal).</li>
+      <li><span class="hlb">Primary key</span>: One chosen candidate key, declared in the schema. The DBA picks one if multiple candidate keys exist.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Identifying keys in Students</div>
+        <p>Students(sid, name, login, age, gpa). Candidate keys: {sid} and possibly {login} (if logins are unique). NOT a key: {name} — two students can have the same name. NOT minimal: {sid, gpa} — gpa is redundant since sid alone identifies the row. Primary key chosen: sid.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Composite primary key</div>
+        <p>Enrolled(sid, cid, grade). Neither sid alone nor cid alone is a key — many students can enroll in the same course, and one student can enroll in many courses. The primary key is {sid, cid}: the combination. This means: "for a given student in a given course, there's one grade." That's the intended business rule.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Keys enforce real-world rules</div>
+        <p>If you declare sid as the primary key of Students, the DBMS will REJECT any attempt to insert two rows with the same sid. This is automatic enforcement of the real-world rule "each student has a unique ID." Without this, your application code would have to check manually — error-prone and tedious.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Foreign Keys and Referential Integrity <span class="sref">Slides 44–48</span></h3>
+    <p>A <span class="hl">foreign key</span> is a set of columns in one table that refer to the primary key of another table. It's a "logical pointer" — it says "this row relates to that row in another table." <span class="hlb">Referential integrity</span> means no dangling references: every foreign key value must match an existing primary key value in the referenced table.</p>
+
+    <p>What happens when you delete a referenced row? Four options:</p>
+    <ul>
+      <li><strong>NO ACTION</strong> (default): Reject the delete — refuse to delete if any other row references it.</li>
+      <li><strong>CASCADE</strong>: Automatically delete all rows that reference the deleted row.</li>
+      <li><strong>SET NULL</strong>: Set the foreign key columns to NULL in referencing rows.</li>
+      <li><strong>SET DEFAULT</strong>: Set the foreign key columns to their default value.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Student enrollment foreign key</div>
+        <div class="code"><span class="kw">CREATE TABLE</span> Enrolled (
+  sid    <span class="fn">CHAR</span>(<span class="num">20</span>),
+  cid    <span class="fn">CHAR</span>(<span class="num">20</span>),
+  grade  <span class="fn">CHAR</span>(<span class="num">2</span>),
+  <span class="kw">PRIMARY KEY</span> (sid, cid),
+  <span class="kw">FOREIGN KEY</span> (sid) <span class="kw">REFERENCES</span> Students
+);</div>
+        <p>Now if you try to INSERT a row into Enrolled with sid=99999 and no student has sid=99999, the DBMS rejects it. Referential integrity is automatically enforced!</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — CASCADE on delete</div>
+        <p>Policy: if a student leaves the university, delete all their enrollment records too. Use ON DELETE CASCADE. When you DELETE FROM Students WHERE sid=53666, all rows in Enrolled with sid=53666 are automatically deleted. No orphaned enrollment records.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — HTML links have no referential integrity!</div>
+        <p>The slides point out: web links in HTML have no referential integrity. You can have a hyperlink pointing to a page that doesn't exist (a 404 error). Relational databases enforce that every "link" (foreign key) points to something that actually exists. This is why databases are reliable and the web is... not always.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Views — Virtual Tables <span class="sref">Slides 50–51</span></h3>
+    <p>A <span class="hl">view</span> is a named query stored in the database. It looks and behaves like a table, but it stores no data itself — it computes its "rows" on the fly by running the underlying query. Views are used for security and convenience.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Creating a view</div>
+        <div class="code"><span class="kw">CREATE VIEW</span> YoungActiveStudents (name, grade) <span class="kw">AS</span>
+  <span class="kw">SELECT</span> S.name, E.grade
+  <span class="kw">FROM</span> Students S, Enrolled E
+  <span class="kw">WHERE</span> S.sid = E.sid <span class="kw">AND</span> S.age &lt; <span class="num">21</span>;</div>
+        <p>Now you can query YoungActiveStudents just like a table. The DBMS runs the underlying SELECT behind the scenes. No data is stored — it's computed fresh each time.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Views for security</div>
+        <p>Employees table has: name, salary, SSN, performance_review. You create a view EmployeeDirectory with only: name, department, phone. You give external staff access to EmployeeDirectory but NOT to Employees. They can look up contact info without seeing salaries or SSNs. Views are a powerful security mechanism.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Views and DROP TABLE</div>
+        <p>If you DROP TABLE Students, what happens to views that use it? The database offers options: RESTRICT (refuse to drop if views depend on it) or CASCADE (drop the table AND all dependent views). Dropping views: DROP VIEW YoungActiveStudents — this only drops the view definition, NOT the underlying data in Students or Enrolled.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     CHAPTER 4 — Relational Algebra
+════════════════════════════════════════ -->
+<section class="chapter" id="ch4">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 4 · Slides 69–100</div>
+    <div>
+      <h2>Relational Algebra</h2>
+      <div class="sub">Selection, Projection, Cross-Product, Joins, Union, Intersection, Difference, Division</div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>What Is Relational Algebra? <span class="sref">Slides 70–72</span></h3>
+    <p><span class="hl">Relational Algebra</span> is the mathematical language for querying relational databases. It's <em>operational</em> — it tells the computer <em>how</em> to compute a result step by step. SQL is based on relational algebra under the hood; the query optimizer converts SQL into algebraic expressions to find the best execution plan.</p>
+    <p>Every operator takes one or more relations as input and produces a new relation as output. Because output is always a relation, you can <strong>compose</strong> operations: feed the output of one into the input of another. The algebra is "closed."</p>
+
+    <div class="callout info">
+      <div class="callout-icon">📖</div>
+      <div class="callout-body">
+        <strong>Reference relations used throughout the examples</strong>
+        <p>Sailors S1: (22, dustin, 7, 45.0), (31, lubber, 8, 55.5), (58, rusty, 10, 35.0)<br>
+        Sailors S2: (28, yuppy, 9, 35.0), (31, lubber, 8, 55.5), (44, guppy, 5, 35.0), (58, rusty, 10, 35.0)<br>
+        Reserves R1: (22, 101, 10/10/96), (58, 103, 11/12/96) — format: (sid, bid, day)</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Selection (σ) — Filtering Rows <span class="sref">Slide 76</span></h3>
+    <p>Selection filters rows based on a condition. Written as <strong>σ<sub>condition</sub>(R)</strong>. It keeps only the rows where the condition is true. The output relation has the same columns as the input but fewer rows.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Select sailors with rating ≥ 8</div>
+        <p><strong>σ<sub>rating ≥ 8</sub>(S2)</strong> returns rows from S2 where rating ≥ 8. Result: (28, yuppy, 9, 35.0) and (58, rusty, 10, 35.0). Rows with rating 5 and 8 (lubber, rating=8: keep! guppy, rating=5: remove!).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Compound condition</div>
+        <p><strong>σ<sub>rating &gt; 8 AND age &lt; 40</sub>(S2)</strong>. Must satisfy BOTH conditions. (28, yuppy, 9, 35.0): rating=9&gt;8 ✓, age=35&lt;40 ✓ → included. (58, rusty, 10, 35.0): rating=10&gt;8 ✓, age=35&lt;40 ✓ → included. Yuppy and rusty make the cut.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — SQL equivalent</div>
+        <p>σ<sub>rating ≥ 8</sub>(S2) is equivalent to: SELECT * FROM S2 WHERE rating &gt;= 8. The SQL WHERE clause IS the relational algebra selection operator. Every time you write a WHERE clause, you're applying a selection.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Projection (π) — Choosing Columns <span class="sref">Slide 75</span></h3>
+    <p>Projection keeps only specified columns (attributes). Written as <strong>π<sub>col1, col2, ...</sub>(R)</strong>. Output has the same rows but fewer columns. Because relations are sets, duplicate rows are eliminated.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Project name and rating</div>
+        <p><strong>π<sub>sname, rating</sub>(S2)</strong>: Keep only the sname and rating columns from S2. Result: (yuppy, 9), (lubber, 8), (guppy, 5), (rusty, 10). Four rows, two columns.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Duplicates eliminated</div>
+        <p><strong>π<sub>age</sub>(S2)</strong>: Keep only the age column. S2 has ages: 35.0, 55.5, 35.0, 35.0. After projection and duplicate elimination: {35.0, 55.5}. Two rows, not four! Relations are sets — no duplicates allowed.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — SQL equivalent</div>
+        <p>π<sub>sname, rating</sub>(S2) ≡ SELECT DISTINCT sname, rating FROM S2. The SELECT clause IS the projection operator. DISTINCT is needed to eliminate duplicates (SQL by default keeps duplicates; relational algebra always eliminates them).</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Cross-Product (×) and Joins <span class="sref">Slides 78–80</span></h3>
+    <p>The <span class="hl">cross-product</span> (Cartesian product) pairs every row of R with every row of S. If R has m rows and S has n rows, the result has m×n rows. This is rarely what you want alone — it's mostly used as a building block for joins.</p>
+    <p>A <span class="hl">join</span> is a cross-product followed by a selection. Joins are the most important operation in relational databases — they combine data from multiple tables.</p>
+    <ul>
+      <li><strong>Condition Join (θ-join)</strong>: R ⋈<sub>c</sub> S = σ<sub>c</sub>(R × S). Cross-product filtered by condition c.</li>
+      <li><strong>Equi-Join</strong>: Condition join where c only uses equalities (=). One copy of equal-valued columns retained.</li>
+      <li><strong>Natural Join</strong>: Equi-join on ALL common column names. Most common in practice.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Cross-product</div>
+        <p>S1 has 3 rows. R1 has 2 rows. S1 × R1 has 3 × 2 = 6 rows. Every sailor is paired with every reservation. Most pairings are nonsense (dustin is paired with rusty's reservation). The cross-product needs a join condition to make sense.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Natural join: find sailors who reserved boats</div>
+        <p>Sailors ⋈ Reserves: joins on the common column "sid." Result: only rows where a sailor's sid matches a reservation's sid. dustin (sid=22) joins with reservation (22, 101, 10/10/96). rusty (sid=58) joins with (58, 103, 11/12/96). lubber (sid=31) has no reservation → NOT in result.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — SQL equivalent</div>
+        <p>S1 ⋈<sub>S1.sid=R1.sid</sub> R1 ≡ SELECT * FROM S1, R1 WHERE S1.sid = R1.sid. Every JOIN in SQL corresponds to a join in relational algebra. The DBMS optimizer decides the most efficient way to compute it (which table to scan first, whether to use indexes, etc.).</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Union, Intersection, Set-Difference <span class="sref">Slide 77</span></h3>
+    <p>These set operations require <span class="hl">union-compatible</span> inputs: same number of columns AND corresponding columns have the same types.</p>
+    <ul>
+      <li><strong>Union (∪)</strong>: All tuples that appear in R OR S (or both). No duplicates.</li>
+      <li><strong>Intersection (∩)</strong>: Only tuples that appear in BOTH R AND S.</li>
+      <li><strong>Set-Difference (−)</strong>: Tuples in R but NOT in S.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Union of two sailor tables</div>
+        <p>S1 ∪ S2: All sailors from either S1 or S2. S1 has dustin, lubber, rusty. S2 has yuppy, lubber, guppy, rusty. Union: dustin, lubber, rusty, yuppy, guppy — 5 unique sailors (lubber and rusty appear in both, but only once in result).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Set-difference</div>
+        <p>S1 − S2: Sailors in S1 but NOT in S2. S1 has sid 22 (dustin), 31 (lubber), 58 (rusty). S2 has 28, 31, 44, 58. Sailors in S1 not in S2 by sid: sid=22 (dustin). Result: just dustin.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — SQL equivalents</div>
+        <p>Union → UNION in SQL. Intersection → INTERSECT. Set-difference → EXCEPT. Important: SQL UNION by default removes duplicates (like relational algebra). UNION ALL keeps duplicates. Most SQL systems support all three, though some older systems don't implement INTERSECT and EXCEPT directly.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Division (÷) — "For All" Queries <span class="sref">Slides 81–84</span></h3>
+    <p>Division answers queries of the form "find all X such that for every Y, (X, Y) is in the relation." It's used for "find all" / "reserved all" type queries. Not a primitive operator but very useful shorthand.</p>
+
+    <p>A ÷ B = all x values such that for every y in B, the pair (x, y) is in A.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Find sailors who reserved ALL boats</div>
+        <p>A = Reserves projected onto (sid, bid). B = Boats projected onto (bid). A ÷ B = sids of sailors such that for every boat bid in Boats, (sid, bid) is in Reserves. Only a sailor who reserved EVERY SINGLE BOAT appears in the result. Classic "for all" pattern.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Expressing division without the ÷ operator</div>
+        <p>Since division is just shorthand: A ÷ B = π<sub>x</sub>(A) − π<sub>x</sub>((π<sub>x</sub>(A) × B) − A). In words: take all x values. Remove x values that are "disqualified" by some y in B (i.e., where (x, y) is missing from A). What remains reserved all boats.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Division in SQL (using NOT EXISTS)</div>
+        <div class="code"><span class="cm">-- Find sailors who reserved ALL boats</span>
+<span class="kw">SELECT</span> S.sname
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE NOT EXISTS</span> (
+  (<span class="kw">SELECT</span> B.bid <span class="kw">FROM</span> Boats B)   <span class="cm">-- all boats</span>
+  <span class="kw">EXCEPT</span>
+  (<span class="kw">SELECT</span> R.bid <span class="kw">FROM</span> Reserves R   <span class="cm">-- boats this sailor reserved</span>
+   <span class="kw">WHERE</span> R.sid = S.sid)
+);</div>
+        <p>"Find sailors where there is NO boat that the sailor has NOT reserved." Double negative = "for all." This is the standard SQL pattern for division.</p>
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>📋 Relational Algebra Operators Summary</h4>
+      <ul>
+        <li><strong>σ (Selection)</strong>: Filter rows. Like SQL WHERE.</li>
+        <li><strong>π (Projection)</strong>: Choose columns. Like SQL SELECT (with DISTINCT).</li>
+        <li><strong>× (Cross-product)</strong>: All row pairs from two tables. Used with selection to form joins.</li>
+        <li><strong>⋈ (Join)</strong>: Cross-product + condition. Most common: equi-join and natural join.</li>
+        <li><strong>∪ ∩ − (Set ops)</strong>: Union, intersection, difference. Need union-compatible schemas.</li>
+        <li><strong>÷ (Division)</strong>: "For all" queries. Find X where every Y relates to X.</li>
+        <li>Algebra is <strong>closed</strong>: output is always a relation, so operators compose.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     CHAPTER 5 — Relational Calculus
+════════════════════════════════════════ -->
+<section class="chapter" id="ch5">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 5 · Slides 101–112</div>
+    <div>
+      <h2>Relational Calculus</h2>
+      <div class="sub">Domain Relational Calculus (DRC), Free/Bound Variables, Quantifiers, Relational Completeness</div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>Algebra vs. Calculus — Operational vs. Declarative <span class="sref">Slides 102–103</span></h3>
+    <p><span class="hl">Relational Algebra</span>: You specify <em>how</em> to compute the result step by step. Operational. "First do this, then do that."</p>
+    <p><span class="hl">Relational Calculus</span>: You specify <em>what</em> you want, not how to compute it. Declarative. "Give me all X such that condition P(X) is true." This is exactly how SQL works — you describe what you want, the optimizer figures out how.</p>
+    <p>Two flavors: <strong>TRC</strong> (Tuple Relational Calculus — variables range over whole tuples) and <strong>DRC</strong> (Domain Relational Calculus — variables range over individual column values). The course focuses on DRC.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Algebra vs. calculus comparison</div>
+        <p>Same query, two approaches. <strong>Algebra</strong>: π<sub>sname</sub>(σ<sub>rating&gt;7</sub>(Sailors)) — "Apply selection, then project." Step-by-step. <strong>Calculus</strong>: {N | ∃I, T, A: ⟨I, N, T, A⟩ ∈ Sailors ∧ T &gt; 7} — "Give me all names N such that there exists a sailor tuple with that name and rating &gt; 7." Declare the answer, not the steps.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — SQL is declarative calculus</div>
+        <p>SELECT sname FROM Sailors WHERE rating &gt; 7 — this is declarative. You say what you want (sailors' names, filtering condition). The DBMS optimizer translates this into an efficient algebraic execution plan. You don't tell it to do a scan vs. use an index — it figures that out.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Power of declarativeness</div>
+        <p>In algebra, the order of operations matters for efficiency. In calculus, you say what's true and the optimizer picks the best order. This separation of "what" from "how" is one of the key innovations of the relational model — it makes query optimization possible and transparent to users.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>DRC Formulas — Syntax and Quantifiers <span class="sref">Slides 104–107</span></h3>
+    <p>A DRC query has the form: <strong>{⟨x₁, x₂, ..., xₙ⟩ | p(x₁, x₂, ..., xₙ)}</strong></p>
+    <p>"The set of tuples (x₁, ..., xₙ) such that formula p is true."</p>
+    <ul>
+      <li><span class="hlb">∃X (p(X))</span>: "There EXISTS some X for which p(X) is true." Used to say "there is some matching tuple somewhere."</li>
+      <li><span class="hlb">∀X (p(X))</span>: "For ALL X, p(X) is true." Used for "for every" queries (like division).</li>
+      <li><span class="hlb">Free variable</span>: A variable that appears in the output (not bound by ∃ or ∀). These are what you're "looking for."</li>
+      <li><span class="hlb">Bound variable</span>: A variable bound by ∃ or ∀. Used to "check something" without being in the output.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Find sailors with rating &gt; 7 (DRC)</div>
+        <p><strong>{⟨I, N, T, A⟩ | ⟨I, N, T, A⟩ ∈ Sailors ∧ T &gt; 7}</strong></p>
+        <p>Variables I, N, T, A are all FREE — they appear on the left of | and must satisfy the formula. The formula says: this 4-tuple must come from Sailors, AND the rating T must be &gt; 7. Result: all full sailor tuples where rating &gt; 7.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Sailors rated &gt; 7 who reserved boat 103</div>
+        <p><strong>{⟨I, N, T, A⟩ | ⟨I, N, T, A⟩ ∈ Sailors ∧ T &gt; 7 ∧ ∃Ir, Br, D (⟨Ir, Br, D⟩ ∈ Reserves ∧ Ir = I ∧ Br = 103)}</strong></p>
+        <p>Now Ir, Br, D are BOUND by ∃ — we just check "does there exist a Reserves tuple matching this sailor and boat 103?" They don't appear in the output. I, N, T, A remain FREE (they are in the output).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Find sailors who reserved ALL boats (uses ∀)</div>
+        <p><strong>{⟨I, N, T, A⟩ | ⟨I, N, T, A⟩ ∈ Sailors ∧ ∀B, BN, C (⟨B, BN, C⟩ ∈ Boats → ∃Ir, Br, D (⟨Ir, Br, D⟩ ∈ Reserves ∧ I = Ir ∧ Br = B))}</strong></p>
+        <p>"A sailor is in the result if: for every boat B, IF B is a real boat (in Boats), THEN there exists a reservation by this sailor for B." The ∀ quantifier makes this a "for all" query — the DRC equivalent of division. B, BN, C, Ir, Br, D are all bound.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Unsafe Queries and Relational Completeness <span class="sref">Slides 110–111</span></h3>
+    <p>An <span class="hl">unsafe query</span> is a syntactically valid DRC query that has infinitely many answers. Example: {S | S ∉ Sailors} means "all tuples NOT in Sailors" — infinitely many! Safe queries restrict answers to values that actually appear in the database.</p>
+    <p><span class="hl">Relational Completeness</span>: A query language is relationally complete if it can express every query that relational algebra can express. SQL is relationally complete — and actually more powerful (it has aggregates, which algebra doesn't).</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Safe vs. unsafe</div>
+        <p>Unsafe: {⟨I⟩ | ¬(⟨I, N, T, A⟩ ∈ Sailors)} — "all IDs NOT belonging to any sailor." Could be infinitely many integers. Safe version: restrict to IDs that actually appear somewhere in the database domain.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — RA and safe calculus are equivalent</div>
+        <p>Every query expressible in relational algebra can be written as a safe DRC query, and vice versa. They have exactly the same expressive power. This is a proven mathematical theorem, not an assumption. This equivalence justifies calling both "relational" query languages.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — SQL goes beyond</div>
+        <p>SQL adds: aggregate functions (COUNT, SUM, AVG, MAX, MIN), GROUP BY, HAVING, ORDER BY, OUTER JOINS. None of these are expressible in pure relational algebra or calculus. SQL is a superset — relationally complete PLUS much more.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════
+     CHAPTER 6 — SQL
+════════════════════════════════════════ -->
+<section class="chapter" id="ch6">
+  <div class="ch-header">
+    <div class="ch-tag">Chapters 6–7 · Slides 113–145</div>
+    <div>
+      <h2>SQL: Queries, Aggregates, Constraints, Triggers</h2>
+      <div class="sub">SELECT-FROM-WHERE, Nested queries, GROUP BY, HAVING, NULL, Integrity Constraints, Triggers</div>
+    </div>
+  </div>
+
+  <div class="topic">
+    <h3>Basic SQL Query — SELECT-FROM-WHERE <span class="sref">Slides 114–120</span></h3>
+    <p>SQL is the language you use to talk to a relational database. The basic query structure is:</p>
+    <div class="code"><span class="kw">SELECT</span>   [<span class="kw">DISTINCT</span>] target-list    <span class="cm">-- which columns (projection)</span>
+<span class="kw">FROM</span>     relation-list           <span class="cm">-- which tables</span>
+<span class="kw">WHERE</span>    qualification            <span class="cm">-- which rows (selection)</span></div>
+
+    <p>The <strong>conceptual evaluation</strong>: compute the cross-product of all tables in FROM, discard rows failing the WHERE condition, project to just the SELECT columns, optionally eliminate duplicates with DISTINCT. The optimizer finds a much faster actual execution, but the result is the same.</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Simple single-table query</div>
+        <div class="code"><span class="kw">SELECT</span> S.sname, S.age
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.rating &gt; <span class="num">7</span>;</div>
+        <p>Finds names and ages of sailors with rating above 7. S is a range variable (alias) for Sailors. The DBMS scans Sailors, keeps rows where rating &gt; 7, returns just sname and age columns.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Multi-table join query</div>
+        <div class="code"><span class="kw">SELECT</span> S.sname
+<span class="kw">FROM</span> Sailors S, Reserves R
+<span class="kw">WHERE</span> S.sid = R.sid <span class="kw">AND</span> R.bid = <span class="num">103</span>;</div>
+        <p>Find names of sailors who reserved boat 103. Cross-product of Sailors and Reserves (all row pairs), keep rows where sids match AND bid=103, return snames. The WHERE S.sid=R.sid is the join condition; R.bid=103 is the filter.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — String matching with LIKE</div>
+        <div class="code"><span class="kw">SELECT</span> S.age, S.age - <span class="num">5</span> <span class="kw">AS</span> age1, <span class="num">2</span> * S.age <span class="kw">AS</span> age2
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.sname <span class="kw">LIKE</span> <span class="str">'B_%B'</span>;</div>
+        <p>Find sailors whose name starts with B, ends with B, and has at least 3 characters (the underscore _ matches exactly one character, % matches zero or more). Also shows computed columns using arithmetic and column aliasing with AS.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Set Operations and Nested Queries <span class="sref">Slides 121–127</span></h3>
+    <p>SQL has set operations (UNION, INTERSECT, EXCEPT) and powerful nested queries (subqueries).</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — UNION: reserved red OR green boat</div>
+        <div class="code"><span class="kw">SELECT</span> S.sid <span class="kw">FROM</span> Sailors S, Boats B, Reserves R
+<span class="kw">WHERE</span> S.sid=R.sid <span class="kw">AND</span> R.bid=B.bid <span class="kw">AND</span> B.color=<span class="str">'red'</span>
+<span class="kw">UNION</span>
+<span class="kw">SELECT</span> S.sid <span class="kw">FROM</span> Sailors S, Boats B, Reserves R
+<span class="kw">WHERE</span> S.sid=R.sid <span class="kw">AND</span> R.bid=B.bid <span class="kw">AND</span> B.color=<span class="str">'green'</span>;</div>
+        <p>UNION automatically removes duplicates — a sailor who reserved both a red AND green boat appears only once. Use UNION ALL to keep duplicates.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Nested query with IN</div>
+        <div class="code"><span class="kw">SELECT</span> S.sname
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.sid <span class="kw">IN</span> (
+  <span class="kw">SELECT</span> R.sid
+  <span class="kw">FROM</span> Reserves R
+  <span class="kw">WHERE</span> R.bid = <span class="num">103</span>
+);</div>
+        <p>The inner query (subquery) runs first, producing a list of sids who reserved boat 103. The outer query finds sailors whose sid is IN that list. Equivalent to the join version, but sometimes clearer to read.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Correlated subquery with EXISTS</div>
+        <div class="code"><span class="kw">SELECT</span> S.sname
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> <span class="kw">EXISTS</span> (
+  <span class="kw">SELECT</span> *
+  <span class="kw">FROM</span> Reserves R
+  <span class="kw">WHERE</span> R.bid = <span class="num">103</span> <span class="kw">AND</span> S.sid = R.sid
+);</div>
+        <p>EXISTS checks if the subquery returns at least one row. The subquery references S.sid from the outer query — it's "correlated." For each sailor S, the subquery is re-run to check if they reserved boat 103. More expensive but sometimes necessary.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Aggregate Functions — COUNT, SUM, AVG, MAX, MIN <span class="sref">Slides 128–132</span></h3>
+    <p><span class="hl">Aggregate functions</span> compute a single value from a set of rows. This extends relational algebra significantly — pure algebra cannot do aggregation.</p>
+    <ul>
+      <li><strong>COUNT(*)</strong> — count number of rows</li>
+      <li><strong>COUNT(DISTINCT A)</strong> — count distinct values of column A</li>
+      <li><strong>SUM(A)</strong> — total of column A</li>
+      <li><strong>AVG(A)</strong> — average of column A</li>
+      <li><strong>MAX(A) / MIN(A)</strong> — largest/smallest value in A</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Simple aggregates</div>
+        <div class="code"><span class="kw">SELECT</span> <span class="fn">COUNT</span>(*)          <span class="cm">-- how many sailors total?</span>
+<span class="kw">FROM</span> Sailors S;
+
+<span class="kw">SELECT</span> <span class="fn">AVG</span>(S.age)        <span class="cm">-- average age of rating-10 sailors</span>
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.rating = <span class="num">10</span>;
+
+<span class="kw">SELECT</span> <span class="fn">MAX</span>(S.age), <span class="fn">MIN</span>(S.age)  <span class="cm">-- oldest and youngest</span>
+<span class="kw">FROM</span> Sailors S;</div>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — Find name of oldest sailor</div>
+        <div class="code"><span class="cm">-- WRONG! Cannot mix aggregates and non-aggregate columns like this:</span>
+<span class="cm">-- SELECT S.sname, MAX(S.age) FROM Sailors S;</span>
+
+<span class="cm">-- CORRECT: Use a subquery</span>
+<span class="kw">SELECT</span> S.sname, S.age
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.age = (<span class="kw">SELECT</span> <span class="fn">MAX</span>(S2.age) <span class="kw">FROM</span> Sailors S2);</div>
+        <p>Why wrong? When you use MAX(age), the result is one number. But sname could be different for each row — which sname do you show? SQL rules: non-aggregate columns in SELECT must appear in GROUP BY, or be used in an aggregate function.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Aggregate operators can't be nested</div>
+        <div class="code"><span class="cm">-- WRONG: Cannot nest aggregates</span>
+<span class="cm">-- SELECT S.rating FROM Sailors S WHERE S.age = MIN(AVG(S2.age)...)</span>
+
+<span class="cm">-- CORRECT: Use a subquery/temp table</span>
+<span class="kw">SELECT</span> Temp.rating
+<span class="kw">FROM</span> (<span class="kw">SELECT</span> S.rating, <span class="fn">AVG</span>(S.age) <span class="kw">AS</span> avgage
+       <span class="kw">FROM</span> Sailors S <span class="kw">GROUP BY</span> S.rating) <span class="kw">AS</span> Temp
+<span class="kw">WHERE</span> Temp.avgage = (<span class="kw">SELECT</span> <span class="fn">MIN</span>(Temp2.avgage) <span class="kw">FROM</span> ... );</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>GROUP BY and HAVING — Grouping Results <span class="sref">Slides 133–137</span></h3>
+    <p><span class="hl">GROUP BY</span> divides rows into groups based on shared values, then applies an aggregate to each group separately. <span class="hl">HAVING</span> filters groups (just as WHERE filters rows).</p>
+
+    <p>Full query form:</p>
+    <div class="code"><span class="kw">SELECT</span>   [<span class="kw">DISTINCT</span>] target-list
+<span class="kw">FROM</span>     relation-list
+<span class="kw">WHERE</span>    row-qualification         <span class="cm">-- filters rows BEFORE grouping</span>
+<span class="kw">GROUP BY</span> grouping-list            <span class="cm">-- groups the remaining rows</span>
+<span class="kw">HAVING</span>   group-qualification      <span class="cm">-- filters groups AFTER grouping</span></div>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Critical rule for GROUP BY</strong>
+        <p>Every column in SELECT that is NOT inside an aggregate function MUST appear in GROUP BY. Example: SELECT rating, AVG(age) → rating must be in GROUP BY. Because each group produces one output row — the DBMS needs a single value for each non-aggregate column (and only grouping columns guarantee that).</p>
+      </div>
+    </div>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — Average age per rating</div>
+        <div class="code"><span class="kw">SELECT</span> S.rating, <span class="fn">MIN</span>(S.age) <span class="kw">AS</span> min_age
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.age &gt;= <span class="num">18</span>
+<span class="kw">GROUP BY</span> S.rating;</div>
+        <p>Rows with age &lt; 18 are excluded first (WHERE). Remaining rows are grouped by rating. For each rating group, MIN(age) is computed. One output row per rating level. rating must be in GROUP BY because it's in SELECT without an aggregate.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — HAVING: filter groups with few members</div>
+        <div class="code"><span class="kw">SELECT</span> S.rating, <span class="fn">MIN</span>(S.age)
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.age &gt; <span class="num">18</span>
+<span class="kw">GROUP BY</span> S.rating
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) &gt; <span class="num">1</span>;</div>
+        <p>Same as above but only output ratings that have MORE THAN ONE sailor (over age 18). HAVING filters groups after grouping, just as WHERE filters rows before. HAVING can use aggregate functions; WHERE cannot.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — HAVING with subquery</div>
+        <div class="code"><span class="kw">SELECT</span> S.rating, <span class="fn">MIN</span>(S.age)
+<span class="kw">FROM</span> Sailors S
+<span class="kw">WHERE</span> S.age &gt; <span class="num">18</span>
+<span class="kw">GROUP BY</span> S.rating
+<span class="kw">HAVING</span> <span class="num">1</span> &lt; (<span class="kw">SELECT</span> <span class="fn">COUNT</span>(*)
+               <span class="kw">FROM</span> Sailors S2
+               <span class="kw">WHERE</span> S.rating = S2.rating);</div>
+        <p>HAVING can also contain a correlated subquery! This version: groups where the TOTAL count of sailors at that rating (including those ≤ 18) is &gt; 1. Different from just counting those &gt; 18.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>NULL Values — The Three-Valued Logic <span class="sref">Slide 138</span></h3>
+    <p><span class="hl">NULL</span> represents an unknown or inapplicable value. Null is NOT zero, NOT empty string, NOT false — it's the absence of a value. It complicates everything because any comparison with NULL is "UNKNOWN" (not true, not false).</p>
+
+    <p>SQL uses <strong>three-valued logic</strong>: TRUE, FALSE, UNKNOWN. WHERE clause keeps rows evaluating to TRUE. UNKNOWN rows are discarded.</p>
+    <ul>
+      <li>NULL = NULL → UNKNOWN (not TRUE!). Use IS NULL or IS NOT NULL to check for nulls.</li>
+      <li>NULL &gt; 5 → UNKNOWN. NULL + 5 → NULL.</li>
+      <li>TRUE AND UNKNOWN → UNKNOWN. FALSE AND UNKNOWN → FALSE. TRUE OR UNKNOWN → TRUE.</li>
+    </ul>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — NULL in comparisons</div>
+        <p>Sailor's rating is NULL (not yet assigned). Query: WHERE rating &gt; 8. For this sailor: NULL &gt; 8 = UNKNOWN → row is discarded. Query: WHERE rating IS NULL → TRUE for this sailor → row is kept. Never write WHERE rating = NULL — that always evaluates to UNKNOWN!</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — NULLs in aggregates</div>
+        <p>COUNT(*) counts all rows including those with NULLs. COUNT(column) counts only non-NULL values in that column. AVG(salary) ignores NULL salaries — it computes the average of non-NULL salaries only. This can give surprising results if you're not careful.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Outer joins (concept)</div>
+        <p>Regular join: if a sailor has no reservations, they don't appear in Sailors ⋈ Reserves. LEFT OUTER JOIN: include all sailors even if they have no reservations — their reservation columns become NULL. This is where NULL becomes especially important: NULLs in outer join results represent "no matching row."</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <div class="topic">
+    <h3>Integrity Constraints and Triggers <span class="sref">Slides 139–144</span></h3>
+    <p><span class="hl">Integrity Constraints (ICs)</span> are conditions that every legal database instance must satisfy. The DBMS automatically enforces them — any INSERT, UPDATE, or DELETE that would violate an IC is rejected. Types:</p>
+    <ul>
+      <li><strong>Domain constraints</strong>: Column values must be of the right type (always enforced).</li>
+      <li><strong>Primary key constraints</strong>: No two rows share the same primary key value.</li>
+      <li><strong>Foreign key constraints</strong>: Foreign key values must exist in the referenced table.</li>
+      <li><strong>General constraints (CHECK)</strong>: Any condition you specify, e.g., rating must be 1–10.</li>
+      <li><strong>ASSERTION</strong>: A constraint not attached to any single table, spanning multiple tables.</li>
+    </ul>
+
+    <p>A <span class="hl">Trigger</span> is a stored procedure that fires automatically when a specified event (INSERT/UPDATE/DELETE) occurs on a table. It has three parts: Event (what triggers it), Condition (should it run?), Action (what it does).</p>
+
+    <div class="ex-section">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card">
+        <div class="ex-n">Example 1 — CHECK constraint</div>
+        <div class="code"><span class="kw">CREATE TABLE</span> Sailors (
+  sid    <span class="fn">INTEGER</span>,
+  sname  <span class="fn">CHAR</span>(<span class="num">10</span>),
+  rating <span class="fn">INTEGER</span>,
+  age    <span class="fn">REAL</span>,
+  <span class="kw">PRIMARY KEY</span> (sid),
+  <span class="kw">CHECK</span> (rating &gt;= <span class="num">1</span> <span class="kw">AND</span> rating &lt;= <span class="num">10</span>)
+);</div>
+        <p>Any attempt to insert a sailor with rating=11 or rating=0 is automatically rejected by the DBMS. You don't need to write application code to enforce this — the database handles it.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 2 — ASSERTION for cross-table constraint</div>
+        <div class="code"><span class="kw">CREATE ASSERTION</span> smallClub
+<span class="kw">CHECK</span> (
+  (<span class="kw">SELECT</span> <span class="fn">COUNT</span>(S.sid) <span class="kw">FROM</span> Sailors S) +
+  (<span class="kw">SELECT</span> <span class="fn">COUNT</span>(B.bid) <span class="kw">FROM</span> Boats B) &lt; <span class="num">100</span>
+);</div>
+        <p>Enforces: total sailors + total boats must be less than 100. This constraint spans two tables — you can't put it as a CHECK on just one table (because adding boats or sailors can both violate it).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">Example 3 — Trigger: auto-populate view on insert</div>
+        <div class="code"><span class="kw">CREATE TRIGGER</span> youngSailorUpdate
+  <span class="kw">AFTER INSERT ON</span> Sailors
+<span class="kw">REFERENCING NEW TABLE</span> NewSailors
+<span class="kw">FOR EACH STATEMENT</span>
+  <span class="kw">INSERT INTO</span> YoungSailors (sid, name, age, rating)
+    <span class="kw">SELECT</span> sid, name, age, rating
+    <span class="kw">FROM</span> NewSailors N
+    <span class="kw">WHERE</span> N.age &lt;= <span class="num">18</span>;</div>
+        <p>After any INSERT into Sailors, this trigger automatically fires and inserts qualifying young sailors into a YoungSailors table. Event = AFTER INSERT ON Sailors. Condition = age ≤ 18. Action = INSERT into YoungSailors. Triggers automate housekeeping without changing application code.</p>
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>📋 SQL Summary (Slides 1–145)</h4>
+      <ul>
+        <li><strong>SELECT-FROM-WHERE</strong>: Core query. WHERE = selection, SELECT = projection, FROM = relations to join.</li>
+        <li><strong>DISTINCT</strong>: Eliminates duplicate rows from result.</li>
+        <li><strong>UNION / INTERSECT / EXCEPT</strong>: Set operations on query results. Need union-compatible schemas.</li>
+        <li><strong>Subqueries</strong>: Queries inside queries. Can use IN, EXISTS, ANY, ALL. Correlated subqueries re-run for each outer row.</li>
+        <li><strong>Aggregates</strong>: COUNT, SUM, AVG, MAX, MIN. Compute one value per group. Cannot nest aggregates.</li>
+        <li><strong>GROUP BY</strong>: Divides rows into groups. Non-aggregate SELECT columns must be in GROUP BY.</li>
+        <li><strong>HAVING</strong>: Filters groups (like WHERE but for groups). Can use aggregates.</li>
+        <li><strong>NULL</strong>: Unknown/inapplicable value. Three-valued logic. Use IS NULL to test.</li>
+        <li><strong>ICs</strong>: Domain, primary key, foreign key, CHECK, ASSERTION. DBMS enforces automatically.</li>
+        <li><strong>Triggers</strong>: Event-Condition-Action. Run automatically when data changes.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>CS281 — Computers &amp; Data Organization · Bilkent University · Dr. Mustafa Değerli</p>
+  <p style="margin-top:8px; font-size:12px;">Study guide covering slides 1–145: Intro to DBMS (Ch.1), ER Model (Ch.2), Relational Model (Ch.3), Relational Algebra (Ch.4), Relational Calculus (Ch.4B), SQL Queries &amp; Constraints (Ch.5)</p>
+</footer>
+
+</body>
+</html>

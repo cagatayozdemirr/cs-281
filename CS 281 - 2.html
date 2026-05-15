@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS281 Guide 2 — Missing Topics Supplement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg:      #0d1117;
+    --surf:    #161b22;
+    --surf2:   #1f2937;
+    --border:  #30363d;
+    --text:    #e6edf3;
+    --muted:   #8b949e;
+    --blue:    #58a6ff;
+    --green:   #3fb950;
+    --orange:  #f0883e;
+    --purple:  #d2a8ff;
+    --red:     #ff7b72;
+    --teal:    #56d364;
+    --gold:    #e3b341;
+    --cyan:    #79c0ff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #1c1228 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(210,168,255,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(210,168,255,0.1);
+    border: 1px solid rgba(210,168,255,0.3);
+    color: var(--purple);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 44px);
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 640px;
+    margin: 0 auto 28px;
+  }
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  .nav-pills a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 5px 12px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--surf);
+    transition: all 0.15s;
+  }
+  .nav-pills a:hover { color: var(--purple); border-color: rgba(210,168,255,0.4); }
+
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 52px 32px 88px;
+  }
+
+  /* CHAPTER */
+  .chapter { margin-bottom: 72px; }
+  .ch-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .ch-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple);
+    background: rgba(210,168,255,0.08);
+    border: 1px solid rgba(210,168,255,0.2);
+    padding: 6px 11px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  .ch-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 30px;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .ch-header .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+
+  /* TOPIC */
+  .topic { margin-bottom: 44px; }
+  .topic h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 21px;
+    color: var(--blue);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .sref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    background: var(--surf2);
+    border: 1px solid var(--border);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .from-slides {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    background: rgba(227,179,65,0.1);
+    border: 1px solid rgba(227,179,65,0.3);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .topic p, .topic li { color: #cdd5e0; margin-bottom: 10px; }
+  .topic ul, .topic ol { padding-left: 22px; }
+  .topic li { margin-bottom: 6px; }
+  strong { color: var(--text); }
+
+  /* EXAMPLES */
+  .examples { margin-top: 22px; }
+  .ex-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--green);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ex-label::after { content: ''; flex: 1; height: 1px; background: rgba(63,185,80,0.2); }
+  .ex-card {
+    background: var(--surf);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .ex-card.from-slide { border-left-color: var(--gold); }
+  .ex-card .ex-n {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .ex-card.from-slide .ex-n { color: var(--gold); }
+  .ex-card p { color: #cdd5e0; margin: 0 0 8px; font-size: 15px; }
+  .ex-card p:last-child { margin-bottom: 0; }
+
+  /* CALLOUTS */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 14.5px;
+  }
+  .callout-icon { font-size: 19px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 14px; }
+  .callout-body p { margin: 0; opacity: 0.9; color: inherit; }
+  .callout.key  { background: rgba(227,179,65,0.07);  border: 1px solid rgba(227,179,65,0.25); color: var(--gold); }
+  .callout.tip  { background: rgba(63,185,80,0.07);   border: 1px solid rgba(63,185,80,0.22);  color: var(--green); }
+  .callout.info { background: rgba(88,166,255,0.07);  border: 1px solid rgba(88,166,255,0.22); color: var(--blue); }
+  .callout.warn { background: rgba(240,136,62,0.07);  border: 1px solid rgba(240,136,62,0.22); color: var(--orange); }
+
+  /* CODE */
+  .code {
+    background: #0a0a10;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #e6edf3;
+    overflow-x: auto;
+    margin: 14px 0;
+    white-space: pre;
+    line-height: 1.65;
+  }
+  .cm { color: var(--muted); font-style: italic; }
+  .kw { color: var(--red); }
+  .hi { color: var(--gold); font-weight: 600; }
+
+  /* SCHEDULE DIAGRAM — special for transaction schedules */
+  .schedule {
+    background: #0a0a10;
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px;
+    padding: 18px 22px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--cyan);
+    overflow-x: auto;
+    margin: 14px 0;
+    white-space: pre;
+    line-height: 1.9;
+  }
+
+  /* DIAGRAM */
+  .diagram {
+    background: #0a0a10;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--teal);
+    overflow-x: auto;
+    margin: 14px 0;
+    white-space: pre;
+    line-height: 1.85;
+  }
+
+  /* TABLE */
+  .tbl { width: 100%; border-collapse: collapse; margin: 18px 0; font-size: 14px; }
+  .tbl th {
+    background: var(--surf2);
+    color: var(--blue);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 11px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .tbl td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: #cdd5e0; vertical-align: top; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:hover td { background: rgba(255,255,255,0.02); }
+
+  hr.div { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+  /* HIGHLIGHT */
+  .hl  { color: var(--gold);   font-weight: 600; }
+  .hlb { color: var(--blue);   font-weight: 600; }
+  .hlg { color: var(--green);  font-weight: 600; }
+  .hlr { color: var(--red);    font-weight: 600; }
+  .hlp { color: var(--purple); font-weight: 600; }
+
+  /* SUMMARY */
+  .summary {
+    background: linear-gradient(135deg, rgba(88,166,255,0.05), rgba(210,168,255,0.05));
+    border: 1px solid rgba(88,166,255,0.18);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .summary h4 {
+    color: var(--purple);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .summary ul { padding-left: 20px; }
+  .summary li { color: #cdd5e0; margin-bottom: 6px; font-size: 14.5px; }
+
+  /* LEGEND */
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 0 0 28px;
+    padding: 14px 18px;
+    background: var(--surf);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; color: var(--muted); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">CS281 · Guide 2 Supplement · Slides 145–263</div>
+  <h1>Missing Topics — Complete Coverage</h1>
+  <p>Every topic identified as missing or shallow in the original Guide 2, now explained in full with slide examples <span style="color:var(--gold)">★</span> and additional invented examples for clarity.</p>
+  <div class="nav-pills">
+    <a href="#3nf-achieve">What 3NF Achieves</a>
+    <a href="#er-refine">Refining ER Diagrams</a>
+    <a href="#bcnf-dep">BCNF + Dep. Preservation</a>
+    <a href="#3nf-decomp">3NF Decomp Algorithm</a>
+    <a href="#cost-why">Cost Table — Why Each Formula</a>
+    <a href="#workload">Understanding Workload</a>
+    <a href="#prefix">Prefix Key Compression</a>
+    <a href="#order-note">A Note on Order</a>
+    <a href="#cascading">Cascading Aborts</a>
+    <a href="#schedules">Exact T1/T2 Schedules</a>
+    <a href="#lh-vs-eh">LH as Variant of EH</a>
+  </div>
+</header>
+
+<main>
+
+<div class="legend">
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--gold)"></div>
+    <span>★ = Example directly from the slides</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-dot" style="background:var(--green)"></div>
+    <span>◆ = Invented example for extra clarity</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 — SCHEMA REFINEMENT GAPS
+═══════════════════════════════════════════ -->
+<section class="chapter" id="schema-gaps">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 19 · Schema Refinement</div>
+    <div>
+      <h2>Schema Refinement — Missing Topics</h2>
+      <div class="sub">What 3NF Achieves · Refining ER Diagrams · BCNF + Dependency Preservation · 3NF Decomposition</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: What Does 3NF Achieve -->
+  <div class="topic" id="3nf-achieve">
+    <h3>What Does 3NF Actually Achieve? <span class="sref">Slide ~158</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The slides dedicate a whole slide to this question that the first guide skipped. When 3NF is violated by an FD X→A, the slides prove that exactly one of two problems arises, and these problems reveal WHY 3NF is the right minimum standard.</p>
+
+    <p><strong>Case 1: X is a proper subset of some key K</strong></p>
+    <p>This means X is part of the key but not the whole key. The FD X→A says some attribute A depends on only part of the key. This causes <span class="hl">redundant storage</span>: the (X, A) pair gets repeated for every different combination of the rest of the key. For example, if key = {StudentID, CourseID} and Grade→InstructorName holds, every row for the same course repeats the instructor name redundantly.</p>
+
+    <p><strong>Case 2: X is not a proper subset of any key</strong></p>
+    <p>There's a FD chain: <strong>K → X → A</strong>. This means you can't store an (X, A) pair unless you also have a K value to associate with it. You can't record that X maps to A without committing to a full key K. This is the insertion anomaly problem — you can't store a fact about X independently of K.</p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>3NF is a compromise — problems can still arise even IN 3NF</strong>
+        <p>The slides explicitly state: even if a relation IS in 3NF, these problems could still occur. 3NF just minimises them — it doesn't eliminate them entirely. That's why BCNF is always preferred if achievable.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Reserves SBDC (the canonical 3NF-but-not-BCNF case)</div>
+        <p>Relation: <strong>Reserves(S, B, D, C)</strong> = (SailorID, BoatID, Day, CreditCardID). FDs: S→C (each sailor has one credit card) and C→S (each card belongs to one sailor). Keys: {S,B,D} and {C,B,D} — two candidate keys.</p>
+        <p>The FD S→C violates BCNF (S is not a key). But C is part of key {C,B,D}, so 3NF is satisfied by Case 1 above. <strong>However:</strong> for every reservation by sailor S, the (S, C) pair is stored again and again. If a sailor makes 100 reservations, their credit card appears 100 times. This is 3NF redundancy that cannot be avoided without losing a dependency.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Case 2: FD Chain</div>
+        <p>Relation: <strong>Enrollment(StudentID, CourseID, DeptID, Building)</strong>. Suppose: CourseID→DeptID (each course belongs to one dept) and DeptID→Building (each dept is in one building). Key: {StudentID, CourseID}. Chain: {StudentID,CourseID} → CourseID → DeptID → Building.</p>
+        <p>You cannot store "the CS dept is in Engineering Hall" without also knowing of a specific enrollment (a StudentID+CourseID). That's Case 2 — the FD chain means facts about DeptID are trapped inside the Enrollment table.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Why 3NF is still a useful compromise</div>
+        <p>In the Reserves(S,B,D,C) example, decomposing to BCNF would lose the dependency S→C or C→S (you'd need a join to check them). 3NF keeps the table intact, accepting some redundancy, but guaranteeing all FDs can be checked locally. In practice: if enforcement of all FDs matters more than storage efficiency, choose 3NF.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: Refining ER Diagram -->
+  <div class="topic" id="er-refine">
+    <h3>Refining an ER Diagram Using FD Analysis <span class="sref">Slide ~169</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>This topic connects everything together: you design an ER diagram, translate it to relations, then use FD/normalization analysis to discover that your ER diagram was wrong and improve it. Normalization feeds back into ER design.</p>
+
+    <div class="callout info">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>The key insight</strong>
+        <p>Sometimes an FD you discover during normalization reveals that an attribute should have been placed in a DIFFERENT entity set in the ER diagram. Normalization is not just about splitting tables — it's a signal to reconsider the original conceptual design.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Workers and Departments (the exact slide example)</div>
+        <p><strong>Before (initial ER translation):</strong></p>
+        <div class="code">Workers(S, N, L, D, since)      -- ssn, name, lot, deptid, since
+Departments(D, M, B)            -- deptid, managerssn, budget</div>
+        <p>The "lot" (L) is a parking lot assigned to a worker. It lives in Workers. Seems fine at first.</p>
+        <p><strong>Discovered FD:</strong> All workers in the same department are assigned the same lot: <strong>D → L</strong> (department determines lot).</p>
+        <p>This is a BCNF violation in Workers (D is not a key for Workers). There's redundancy: every employee in Department 5 stores "Lot C" in their row. Fix by splitting:</p>
+        <div class="code"><span class="hi">Option A — Split Workers:</span>
+Workers2(S, N, D, since)        -- ssn, name, deptid, since
+Dept_Lots(D, L)                 -- deptid, lot
+
+<span class="hi">Option B — Fine-tune (merge lot into Departments):</span>
+Workers2(S, N, D, since)        -- ssn, name, deptid, since
+Departments(D, M, B, L)         -- deptid, manager, budget, lot</div>
+        <p>Option B is cleaner: "lot" belongs to Departments conceptually, which is where it should have been in the ER diagram from the start. Normalization revealed an ER design mistake.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Phone number in wrong entity</div>
+        <p>Initial ER: <strong>Employees(EmpID, Name, DeptID, DeptPhone)</strong>. Discovered FD: DeptID→DeptPhone (every employee in Dept 3 has the same phone 555-1234).</p>
+        <p>This reveals DeptPhone belongs to Departments, not Employees. Refine the ER diagram: remove DeptPhone from Employees entity set, add it to Departments. Then re-translate: Employees(EmpID, Name, DeptID) and Departments(DeptID, DeptName, DeptPhone). Now there's no redundancy and no update anomaly.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Salary grade in wrong table</div>
+        <p>Initial: <strong>Employees(EmpID, Name, JobTitle, SalaryGrade, Salary)</strong>. Discovered FD: JobTitle→SalaryGrade. This means salary grade should be in a Jobs table, not Employees. Refine: Employees(EmpID, Name, JobTitle) and Jobs(JobTitle, SalaryGrade, BaseSalary). The normalization result directly tells you to split the ER entity.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: BCNF and Dependency Preservation -->
+  <div class="topic" id="bcnf-dep">
+    <h3>BCNF and Dependency Preservation — Sometimes Impossible <span class="sref">Slide ~167</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The slides have a dedicated slide proving that a dependency-preserving decomposition into BCNF is <span class="hl">not always possible</span>. This is a critical theoretical result. When it happens, you must choose between BCNF (losing dependency preservation) and 3NF (keeping it, accepting some redundancy).</p>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — CSZ: the proof that BCNF can lose dependencies</div>
+        <p>Relation: <strong>CSZ</strong> (CityName, StreetName, ZipCode). FDs: <strong>CS→Z</strong> (city + street determines zip) and <strong>Z→C</strong> (zip determines city). Both candidate keys: {C,S} and {Z,S}.</p>
+        <p>Check BCNF violations: Z→C — is Z a superkey? No (Z alone doesn't determine S). So Z→C violates BCNF. Try to decompose: split into ZC (zip, city) and ZS (zip, street)? But then CS→Z cannot be checked on either ZC or ZS alone — you'd need a join. <strong>No BCNF decomposition preserves CS→Z.</strong></p>
+        <p>This is the fundamental tension: BCNF vs dependency preservation. In this case, 3NF is the correct choice — CSZ is in 3NF (C is part of key {C,S}, so Z→C satisfies the 3NF condition "A is part of some key").</p>
+      </div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — CSJDPQV: adding JPC just for constraint checking</div>
+        <p>From the slides: decomposition of CSJDQV into SDP, JS, and CJDQV is a <em>lossless join</em> but <em>NOT dependency-preserving</em> for FD JP→C (because J and P are now in different tables).</p>
+        <p>Solution: add table <strong>JPC</strong> to the collection of relations, purely so the FD JP→C can be checked locally. But this means JPC tuples are stored <em>only for enforcement</em> — pure overhead, pure redundancy. This is the real cost of BCNF when dependency preservation fails.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Flight booking analogy</div>
+        <p>Imagine: <strong>FlightSeat(FlightNo, SeatNo, PassengerID)</strong>. FDs: FlightNo+SeatNo → PassengerID (one passenger per seat per flight) and FlightNo+PassengerID → SeatNo (one seat per passenger per flight). Both form candidate keys.</p>
+        <p>Any BCNF decomposition splits the table. But to check the second FD (one seat per passenger), you'd need to join the pieces. No way around it. This is a CSZ-style situation. Accept 3NF — both FDs are checkable locally, with minimal redundancy.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: 3NF Decomp Algorithm -->
+  <div class="topic" id="3nf-decomp">
+    <h3>3NF Decomposition Algorithm — Step by Step <span class="sref">Slides ~170–172</span></h3>
+    <p>The slides describe a concrete algorithm for decomposing into 3NF that <em>always</em> produces a lossless-join, dependency-preserving result. The key step is using a <span class="hl">minimal cover</span> instead of the original FD set.</p>
+
+    <p><strong>Step 1: Find the Minimal Cover</strong></p>
+    <p>A <span class="hlb">minimal cover G</span> for a set of FDs F is the smallest set of FDs with the same closure as F. Every FD in G is needed, each has a single attribute on the right side, and no attribute on either side is redundant.</p>
+    <p>Properties of a minimal cover:</p>
+    <ul>
+      <li>Closure of F = closure of G (same power).</li>
+      <li>Right-hand side of every FD in G is a <strong>single attribute</strong>.</li>
+      <li>If you remove any FD or any attribute from any FD in G, the closure changes — nothing is redundant.</li>
+    </ul>
+
+    <p><strong>Step 2: Create tables from minimal cover</strong></p>
+    <p>For each FD X→A in the minimal cover, create a relation with attributes X ∪ {A}. If X→A and X→B are both in the cover, combine them into one table XAB with key X.</p>
+
+    <p><strong>Step 3: Ensure lossless join</strong></p>
+    <p>If no relation in the result contains a key for the original relation R, add a table containing just the key attributes of R.</p>
+
+    <div class="callout key">
+      <div class="callout-icon">🔑</div>
+      <div class="callout-body">
+        <strong>Why minimal cover, not just F?</strong>
+        <p>If you naively add table XY for every unpreserved FD, XY might itself violate 3NF. For example, if you add CJP to preserve JP→C, but you also have J→C, then within CJP the FD J→C violates 3NF (J is not a key of CJP). The minimal cover avoids this by stripping out redundant FDs first.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Computing a minimal cover</div>
+        <p>Given FDs: <strong>A→B, ABCD→E, EF→GH, ACDF→EG</strong></p>
+        <p>Step 1: Make all RHS single attributes (decompose): A→B, ABCD→E, EF→G, EF→H, ACDF→E, ACDF→G</p>
+        <p>Step 2: Remove redundant left-side attributes. ABCD→E: since A→B, we know B is derivable from A. Can we drop B from ABCD? Check: does ACD→E hold? A→B, so ACD→B, and ABCD→E, so ACD→E. Yes! Remove B. ABCD→E becomes ACD→E. Continue: ACDF→E — does ACD→E already? Yes! Drop ACDF→E as redundant. Similarly ACDF→G — EF→G and ACD→E, so ACDF→E→G. Drop ACDF→G.</p>
+        <p>Step 3: Remove redundant FDs. Final minimal cover: <strong>A→B, ACD→E, EF→G, EF→H</strong></p>
+        <p>This produces 3NF tables: AB (key A), ACDE (key ACD), EFG (key EF), EFH (key EF) — or combined: EFGH (key EF).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Simple 3NF decomposition</div>
+        <p>Relation: <strong>SNLRWH</strong> (SSN, Name, Lot, Rating, Wage, Hours). FDs: S→SNLRWH, R→W. Minimal cover: {S→N, S→L, S→R, S→H, R→W} (simplify — S→W is derivable via S→R→W, so remove it from the cover).</p>
+        <p>3NF tables from minimal cover: one table per FD group. S determines N, L, R, H → <strong>SNLRH</strong> (key=S). R determines W → <strong>RW</strong> (key=R). Result: SNLRH and RW — exactly what we'd expect, and it's both lossless-join (shared column R) and dependency-preserving (each FD in its own table).</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — When 3NF and BCNF decompositions differ</div>
+        <p>For CSZ: BCNF decomposition loses CS→Z. 3NF decomposition using minimal cover {CS→Z, Z→C}: creates tables CSZ (key={C,S} or {Z,S}) — which is already 3NF! No decomposition needed. The result preserves both FDs and is lossless. This shows why 3NF decomposition is preferred when BCNF loses dependencies: the 3NF algorithm simply keeps CSZ intact because it's already in 3NF.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2 — STORAGE & INDEXING GAPS
+═══════════════════════════════════════════ -->
+<section class="chapter" id="indexing-gaps">
+  <div class="ch-header">
+    <div class="ch-tag">Chapters 8–9 · Storage &amp; Tree Indexes</div>
+    <div>
+      <h2>Storage &amp; Indexing — Missing Topics</h2>
+      <div class="sub">Cost Table Explanations · Understanding Workload · Prefix Key Compression · A Note on Order</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: Cost Table — Why Each Formula -->
+  <div class="topic" id="cost-why">
+    <h3>Cost of Operations — Why Each Formula Is What It Is <span class="sref">Slides ~180–183</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The original guide showed the cost table but didn't explain <em>why</em> each cell has the formula it does. Here is the reasoning for every entry. Recall: <strong>B</strong> = data pages, <strong>R</strong> = records per page, <strong>D</strong> = time per page I/O. Assumptions: indexes use 10% of record size for entries (Alt 2/3), hash has 80% occupancy → 1.25B pages, tree has 67% occupancy → 1.5B pages.</p>
+
+    <table class="tbl">
+      <tr><th>Organization</th><th>Operation</th><th>Formula</th><th>Why this formula</th></tr>
+      <tr>
+        <td><strong>(1) Heap</strong></td>
+        <td>Scan</td>
+        <td>BD</td>
+        <td>Read every page once sequentially. B pages × D cost each.</td>
+      </tr>
+      <tr>
+        <td><strong>(1) Heap</strong></td>
+        <td>Equality</td>
+        <td>0.5BD</td>
+        <td>On average, find the record halfway through a scan. Expected = B/2 pages. (Assumes exactly one match on a key.)</td>
+      </tr>
+      <tr>
+        <td><strong>(1) Heap</strong></td>
+        <td>Range</td>
+        <td>BD</td>
+        <td>No ordering — must scan everything to find all matches.</td>
+      </tr>
+      <tr>
+        <td><strong>(1) Heap</strong></td>
+        <td>Insert</td>
+        <td>2D</td>
+        <td>Read last page (1D), write it back with new record (1D). Append to end of file.</td>
+      </tr>
+      <tr>
+        <td><strong>(1) Heap</strong></td>
+        <td>Delete</td>
+        <td>Search + D</td>
+        <td>First find the record (equality search cost), then write the page back with record removed (1D).</td>
+      </tr>
+      <tr>
+        <td><strong>(2) Sorted</strong></td>
+        <td>Scan</td>
+        <td>BD</td>
+        <td>Same as heap — read every page. Sorted order doesn't help scan cost.</td>
+      </tr>
+      <tr>
+        <td><strong>(2) Sorted</strong></td>
+        <td>Equality</td>
+        <td>D·log₂B</td>
+        <td>Binary search over B pages. Binary search takes log₂B page comparisons.</td>
+      </tr>
+      <tr>
+        <td><strong>(2) Sorted</strong></td>
+        <td>Range</td>
+        <td>D·log₂B + #matches</td>
+        <td>Binary search to find first match (log₂B), then scan forward page by page to read all matches.</td>
+      </tr>
+      <tr>
+        <td><strong>(2) Sorted</strong></td>
+        <td>Insert</td>
+        <td>Search + BD</td>
+        <td>Find where to insert (log₂B), then shift all subsequent pages to maintain sort order — costs BD in worst case.</td>
+      </tr>
+      <tr>
+        <td><strong>(3) Clustered B+</strong></td>
+        <td>Scan</td>
+        <td>1.5BD</td>
+        <td>All data is in the B+ tree (Alt 1). 67% occupancy means 1.5× more pages than the raw data.</td>
+      </tr>
+      <tr>
+        <td><strong>(3) Clustered B+</strong></td>
+        <td>Equality</td>
+        <td>D·log<sub>F</sub>(1.5B)</td>
+        <td>Traverse tree from root to leaf. Height ≈ log<sub>F</sub>(1.5B) where F is fanout (~100–200). Very fast.</td>
+      </tr>
+      <tr>
+        <td><strong>(3) Clustered B+</strong></td>
+        <td>Insert</td>
+        <td>Search + D</td>
+        <td>Find the right leaf (search cost), write the updated leaf page (1D). Occasional splits add overhead but amortized away.</td>
+      </tr>
+      <tr>
+        <td><strong>(4) Unclustered Tree</strong></td>
+        <td>Scan</td>
+        <td>BD(R + 0.15)</td>
+        <td>BD to read all data pages. Plus 0.15B pages for the index itself (10% of data entry size × 1.5 for 67% occupancy). Each data record may be on a different page → terrible for scans.</td>
+      </tr>
+      <tr>
+        <td><strong>(4) Unclustered Tree</strong></td>
+        <td>Equality</td>
+        <td>D(1 + log<sub>F</sub> 0.15B)</td>
+        <td>Traverse the index tree (log<sub>F</sub> of 0.15B index pages), then 1 fetch of the actual data page. Total: index height + 1.</td>
+      </tr>
+      <tr>
+        <td><strong>(4) Unclustered Tree</strong></td>
+        <td>Range</td>
+        <td>D·log<sub>F</sub>(0.15B) + #matches</td>
+        <td>Find first match via tree, then each matching record may be on a DIFFERENT data page → one I/O per matching record. Very expensive for large result sets.</td>
+      </tr>
+      <tr>
+        <td><strong>(5) Unclustered Hash</strong></td>
+        <td>Equality</td>
+        <td>2D</td>
+        <td>1D to hash and read the index bucket, 1D to fetch the actual data record. Constant time! Best equality performance.</td>
+      </tr>
+      <tr>
+        <td><strong>(5) Unclustered Hash</strong></td>
+        <td>Range</td>
+        <td>BD</td>
+        <td>Hash scatters related keys to random buckets. Must scan ALL data pages — same as full heap scan. Hash is useless for range queries.</td>
+      </tr>
+      <tr>
+        <td><strong>(5) Unclustered Hash</strong></td>
+        <td>Insert</td>
+        <td>4D</td>
+        <td>Read index bucket (1D), write index bucket with new entry (1D), read data page (1D), write data page with new record (1D).</td>
+      </tr>
+    </table>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Specific file organizations compared</div>
+        <p>The slides set up the comparison using exactly these 5 organizations, all on the same relation with search key &lt;age, sal&gt;:</p>
+        <div class="code">(1) Heap file (random order, insert at end-of-file)
+(2) Sorted file, sorted on &lt;age, sal&gt;
+(3) Clustered B+ tree, Alternative 1, search key &lt;age, sal&gt;
+(4) Heap file + unclustered B+ tree index on &lt;age, sal&gt;
+(5) Heap file + unclustered hash index on &lt;age, sal&gt;</div>
+        <p>The 5 operations compared are: (a) Scan all, (b) Equality search, (c) Range search, (d) Insert, (e) Delete. The "good enough to show trends" note is important — these are approximations, not exact measurements.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Choosing between (3) and (4)</div>
+        <p>Your database has B=10,000 pages, R=100 records/page, D=10ms. A query does range search returning 500 matching records.</p>
+        <p>Clustered B+ (3): log<sub>133</sub>(15,000) ≈ 2.3, so about 3 I/Os to reach leaf + 500/100 = 5 pages of sequential data = ~8 I/Os = 80ms.</p>
+        <p>Unclustered tree (4): log<sub>133</sub>(1,500) ≈ 1.8 for tree + 500 random I/Os (one per record) = ~500 I/Os = 5,000ms.</p>
+        <p>Clustered is 62× faster for this range query. This is exactly why clustering matters so much.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Why sorted insert costs Search + BD</div>
+        <p>Sorted file with B=1000 pages. Insert a new record that belongs on page 1 (the first page alphabetically). You must shift pages 2 through 1000 one position forward to make room — that's reading and writing 999 pages ≈ BD. Binary search to find the position costs D·log₂(1000)=10D. Total: ~2000D. Contrast with heap insert: just 2D. This is why sorted files are rarely used in practice — B+ trees give similar search performance with much cheaper inserts.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: Understanding the Workload -->
+  <div class="topic" id="workload">
+    <h3>Understanding the Workload Before Choosing Indexes <span class="sref">Slide ~184</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The slides say you must <em>understand the workload</em> before deciding which indexes to build. An index is useless if it doesn't serve the actual queries. This slide gives a checklist of what to analyse.</p>
+
+    <p><strong>For each query in the workload, ask:</strong></p>
+    <ul>
+      <li>Which relations does it access?</li>
+      <li>Which attributes are retrieved (appear in SELECT)?</li>
+      <li>Which attributes are in selection/join conditions (appear in WHERE/ON)?</li>
+      <li>How selective are those conditions likely to be? (Does "age > 30" match 90% of rows, or 1%?)</li>
+    </ul>
+
+    <p><strong>For each update in the workload, ask:</strong></p>
+    <ul>
+      <li>Which attributes are in selection/join conditions?</li>
+      <li>How selective are those conditions?</li>
+      <li>What type of update (INSERT / DELETE / UPDATE)? Which attributes are affected?</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="callout-icon">✅</div>
+      <div class="callout-body">
+        <strong>Why updates matter for index decisions</strong>
+        <p>Every index you build must be maintained on every INSERT, DELETE, and UPDATE. A table with 5 indexes pays 5× the write cost on every modification. If a table is written 10,000 times per second but queried only 10 times, building extra indexes hurts overall throughput even if they speed up those 10 queries.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Clustered index choice for GROUP BY</div>
+        <p>Two queries from the slides on an Employees table:</p>
+        <div class="code">Query 1: SELECT E.dno FROM Emp E WHERE E.age > 40
+
+Query 2: SELECT E.dno, COUNT(*) FROM Emp E WHERE E.age > 10 GROUP BY E.dno</div>
+        <p>For Query 1: B+ tree on E.age seems useful. But how selective is age > 40? Depends on the data distribution. If most employees are over 40, even an index doesn't help much.</p>
+        <p>For Query 2: If many tuples have E.age > 10 (likely — almost everyone is over 10), using the E.age index retrieves most rows anyway. Then you still need to sort them by dno for the GROUP BY. A clustered index on E.dno is much better: GROUP BY dno is free (data already sorted by dno), and the WHERE age>10 is applied as a filter.</p>
+        <p><strong>Lesson:</strong> Query 2 changes the optimal index choice completely. Understanding the GROUP BY changes the analysis. You must consider the whole query, not just the WHERE clause.</p>
+      </div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Equality queries with duplicates</div>
+        <p>Query from the slides:</p>
+        <div class="code">SELECT E.dno FROM Emp E WHERE E.hobby = 'Stamps'</div>
+        <p>If many employees share the same hobby (hobby is not unique), a clustered index on E.hobby is extremely valuable. All employees with hobby='Stamps' are physically together on disk — one sequential scan of that group. An unclustered index would mean one random I/O per matching employee — terrible if 10,000 employees collect stamps.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — High-write table</div>
+        <p>A web server logs every HTTP request to a Requests table: 50,000 inserts per second. Analysts run daily reports filtering by user_id. You're tempted to add an index on user_id. But: 50,000 inserts/second means 50,000 index updates/second. The write overhead is enormous. Better solution: write to an unindexed log table, then periodically ETL to a reporting table that has the index. Understanding the write workload changes the architecture entirely.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: Prefix Key Compression -->
+  <div class="topic" id="prefix">
+    <h3>Prefix Key Compression in B+ Trees <span class="sref">Slide ~216</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>Non-leaf pages in a B+ tree store keys only to <em>direct searches</em> — they don't store the actual data. This means we don't need the full key value stored in every non-leaf node. We just need enough information to decide which subtree to follow. <span class="hl">Prefix key compression</span> exploits this: store only a prefix of the key that is sufficient to separate adjacent subtrees.</p>
+
+    <p><strong>Why does this matter?</strong> Higher fanout = fewer levels in the tree = fewer disk I/Os per search. Every byte saved in a non-leaf node allows more keys per page, increasing fanout F, reducing tree height log<sub>F</sub>(N).</p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>The critical correctness constraint from the slides</strong>
+        <p>When compressing a key in a non-leaf node, the compressed key must still be <strong>greater than every key value in any subtree to its left</strong>. You can only compress as much as this constraint allows.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Dannon/David/Devarakonda</div>
+        <p>Three adjacent index entries in a non-leaf node: <strong>"Dannon Yogurt"</strong>, <strong>"David Smith"</strong>, <strong>"Devarakonda Murthy"</strong></p>
+        <p>Can we compress "David Smith"? It needs to be greater than everything to its left (everything in the Dannon Yogurt subtree) and less than everything to its right (the Devarakonda Murthy subtree).</p>
+        <p>Naive guess: compress to "Dav" — is "Dav" > "Dannon Yogurt"? Yes. Is everything in the left subtree < "Dav"? Only if there's no key between "Dannon Yogurt" and "Dav". But what if there's a data entry "Davey Jones"? "Davey Jones" > "Dav", meaning "Dav" would incorrectly route a search for "Davey Jones" to the wrong subtree.</p>
+        <p><strong>Correct answer: compress only to "Davi"</strong> — long enough to be strictly greater than "Davey Jones" (since "Davi" < "Davey"), so "Davey Jones" is still correctly routed. The rule: the compressed key must be the shortest prefix that is still strictly greater than all keys in the left subtree.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Numeric key compression</div>
+        <p>Non-leaf node has entries: 100512, 200348, 300791. The actual minimum difference between them is large. Can compress 200348 to just "2" if the left subtree contains only numbers starting with 1 and the right subtree starts at 3. "2" correctly routes any key: keys starting with 1 go left, keys starting with 2 stay, keys starting with 3+ go right. 6 bytes compressed to 1 — massive fanout increase.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Why fanout matters so much</div>
+        <p>Without compression: non-leaf keys are 50 bytes each, page size 4KB → ~80 keys per page → fanout ≈ 81. Height for 10M records: log₈₁(10,000,000) ≈ 3.8 → 4 levels.</p>
+        <p>With compression: keys compressed to ~10 bytes → ~400 keys per page → fanout ≈ 401. Height: log₄₀₁(10,000,000) ≈ 2.9 → 3 levels. One fewer disk I/O per search, guaranteed. For a database serving millions of queries per second, this is enormous.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: A Note on Order -->
+  <div class="topic" id="order-note">
+    <h3>A Note on 'Order' — Theory vs. Practice <span class="sref">Slide ~220</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>In theory, a B+ tree of <strong>order d</strong> means each node holds between d and 2d keys. The minimum occupancy rule is "at least d keys." In practice, real database systems <em>don't use the order parameter</em>. Instead they use a physical space criterion: "at least half-full."</p>
+
+    <p>Why the difference? Three reasons from the slides:</p>
+    <ul>
+      <li><strong>Index pages vs. leaf pages differ:</strong> A non-leaf page holding 4-byte integer keys fits many more entries than a leaf page holding full records. Order d would have to be different for different page types — impractical.</li>
+      <li><strong>Variable-length records and keys:</strong> If records are different sizes, different nodes hold different numbers of entries. A fixed d doesn't make sense.</li>
+      <li><strong>Duplicate keys with Alternative 3:</strong> Even with fixed-length keys, Alternative 3 stores a list of rids per key. If one key value has 1,000 duplicates, that entry is enormous. The same "order d" can't apply to all nodes.</li>
+    </ul>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Variable-length entries break fixed order</div>
+        <p>Index uses Alternative 3 (key + list of rids). Search key is a product name (variable-length string). Entry for "Apple" might have 50,000 matching records (50,000 rids). Entry for "ZZZ-Widget" might have 1 matching record. Both entries would be in the same B+ tree node, but one is thousands of times larger than the other. Saying "this node holds between d and 2d entries" is meaningless — the physical space used varies wildly per entry.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — How "half-full" works in practice</div>
+        <p>Page size: 8 KB. A non-leaf page stores 4-byte integer keys → could fit ~2000 keys per page. The "half-full" rule says: as long as this page uses at least 4 KB of its 8 KB capacity, it's fine. Whether that's 900 keys or 1100 keys depends on the actual key sizes of the specific keys in that node. No fixed d needed.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Why this matters for exam problems</div>
+        <p>When exam questions say "B+ tree of order d=2," they mean each leaf/node holds between 2 and 4 entries. This is the textbook model used for small worked examples (like the insert/delete examples in the slides). In real databases, the order d concept is replaced by "at least half-full" — but for exam calculations with small trees, use d exactly as stated.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3 — HASH INDEXING GAP
+═══════════════════════════════════════════ -->
+<section class="chapter" id="hash-gap">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 11 · Hash Indexes</div>
+    <div>
+      <h2>Hash Indexes — Missing Topic</h2>
+      <div class="sub">Linear Hashing as a Variant of Extendible Hashing</div>
+    </div>
+  </div>
+
+  <div class="topic" id="lh-vs-eh">
+    <h3>LH Described as a Variant of EH <span class="sref">Slide ~233</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The slides have a dedicated slide making an important conceptual point: Linear Hashing (LH) and Extendible Hashing (EH) are mathematically the same scheme, just implemented differently. Understanding this connection shows <em>why</em> LH works without a directory.</p>
+
+    <p>The slide's argument, step by step:</p>
+    <ol>
+      <li>Start with an EH index whose directory has N elements.</li>
+      <li>Instead of doubling the directory all at once when a bucket overflows, split buckets round-robin (one at a time, bucket 0 first, then 1, then 2…).</li>
+      <li>When bucket 0 splits: in EH, you'd double the directory from N to 2N entries. But entries &lt;1,N+1&gt;, &lt;2,N+2&gt;, …, &lt;N-1, 2N-1&gt; all point to the same bucket as before — they're identical pairs. Only entry N is new (it points to the split image of bucket 0).</li>
+      <li>So you only need to create directory element N, not double the whole directory.</li>
+      <li>When bucket 1 splits next: create directory element N+1. And so on.</li>
+      <li>The directory grows by one entry at a time instead of doubling. If you allocate primary bucket pages in order (bucket 0 at position 0, bucket 1 at position 1…), you can calculate the position of the i-th bucket directly — no directory pointer needed! You navigate to bucket i by calculating its position.</li>
+    </ol>
+
+    <div class="callout key">
+      <div class="callout-icon">🔑</div>
+      <div class="callout-body">
+        <strong>The key insight: LH eliminates the directory by exploiting sequential allocation</strong>
+        <p>EH needs a directory because buckets can be scattered anywhere in memory. LH forces primary bucket pages to be allocated sequentially in order, so you can find bucket i directly by address. The "directory" is implicit in the sequential layout. This is why LH uses no directory structure but does need overflow pages — the overflow pages handle the cases that EH handles with split images in the directory.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — The equivalence argument</div>
+        <p>Start with EH, N=4 buckets, directory = [00→B0, 01→B1, 10→B2, 11→B3].</p>
+        <p>Bucket 0 (pointed to by "00") overflows. EH would double to 8 entries: [000→B0, 001→B1, 010→B2, 011→B3, 100→B0_new, 101→B1, 110→B2, 111→B3].</p>
+        <p>But notice: entries 001=01, 010=10, 011=11 didn't change — they're identical to before, just with a leading 0. Only entry 100 is new. So instead of creating all 8 entries, just create entry "100" pointing to the split image. The other 7 are the same as before. <strong>This is exactly what LH does</strong> — grow one entry at a time, exploiting that most entries don't change.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Sequential allocation as an implicit directory</div>
+        <p>Imagine a parking garage where cars are numbered sequentially: Car 0 is in Space 0, Car 1 in Space 1, etc. You don't need a map — you know exactly where Car 47 is. LH is like this: bucket i is always at disk address (base + i × page_size). No directory needed. EH is like a parking garage where cars park in random spots — you need a map (directory) to find Car 47.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Trade-offs: when to choose LH vs EH</div>
+        <p><strong>Choose EH when:</strong> Data distribution is skewed (many keys hash to same bucket) — EH concentrates splits on "hot" buckets. Directory fits in memory easily for uniform data. You want zero overflow pages.</p>
+        <p><strong>Choose LH when:</strong> You want simpler implementation (no directory management). Data might have duplicates (LH handles well). Memory is very limited (no directory at all). You prefer gradual, predictable growth over sudden directory doublings.</p>
+        <p>Both are dynamic and both beat static hashing for growing data sets. In practice, most systems use extendible hashing variants because the directory doubling is fast and overflow pages are truly eliminated for non-duplicate keys.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4 — TRANSACTION MANAGEMENT GAPS
+═══════════════════════════════════════════ -->
+<section class="chapter" id="xact-gaps">
+  <div class="ch-header">
+    <div class="ch-tag">Chapter 16 · Transaction Management</div>
+    <div>
+      <h2>Transaction Management — Missing Topics</h2>
+      <div class="sub">Exact T1/T2 Schedules · Cascading Aborts · Why Strict 2PL Prevents Them</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: Exact T1/T2 schedules -->
+  <div class="topic" id="schedules">
+    <h3>The Exact T1/T2 Bank Transfer Schedules from the Slides <span class="sref">Slides ~244–248</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The slides use a concrete bank transfer example throughout the transaction chapter. You need to know this exact example for the exam — the notation, the two schedules, and why one is OK and one is not.</p>
+
+    <p><strong>The two transactions:</strong></p>
+    <div class="schedule">T1:  BEGIN  A = A + 100,  B = B - 100  END
+     (Transfer $100 from B's account to A's account)
+
+T2:  BEGIN  A = 1.06*A,  B = 1.06*B  END
+     (Credit both accounts with 6% interest)</div>
+
+    <p>Both are submitted at the same time. The DBMS must produce a result equivalent to running them serially — either T1 then T2, or T2 then T1. That's the serializability requirement.</p>
+
+    <p><strong>Schedule 1 — This is OK (serializable):</strong></p>
+    <div class="schedule">T1:  A=A+100,               B=B-100
+T2:            A=1.06*A,                      B=1.06*B
+
+Timeline →</div>
+    <p>T1 finishes updating A, then T2 reads the new A, then T1 updates B, then T2 reads the new B. This is equivalent to running T1 completely, then T2. Serializable ✓</p>
+
+    <p><strong>Schedule 2 — This is NOT OK (not serializable):</strong></p>
+    <div class="schedule">T1:  A=A+100,                              B=B-100
+T2:            A=1.06*A,  B=1.06*B
+
+Timeline →</div>
+    <p>T2 reads and updates B <em>before</em> T1 applies the transfer to B. T1's update to B comes after T2 is done. T1's -100 overwrites T2's interest calculation on B. B loses its interest payment. This result cannot be produced by any serial ordering of T1 and T2. Not serializable ✗</p>
+
+    <p><strong>The DBMS's abstract view of Schedule 2 (exactly as written in the slides):</strong></p>
+    <div class="schedule">T1:  R(A),  W(A),                          R(B),  W(B)
+T2:               R(A),  W(A),  R(B),  W(B)
+
+The DBMS sees only reads R() and writes W() — not the arithmetic.</div>
+
+    <div class="callout info">
+      <div class="callout-icon">📐</div>
+      <div class="callout-body">
+        <strong>R(X) and W(X) notation</strong>
+        <p>The DBMS doesn't understand "A = A + 100." It only sees R(A) (read object A from disk to buffer) and W(A) (write buffer value of A back to disk). All the arithmetic happens in the application layer. The DBMS's job is to schedule R() and W() operations safely across transactions.</p>
+      </div>
+    </div>
+
+    <p><strong>Serial schedules and equivalence — exact definitions from the slides:</strong></p>
+    <ul>
+      <li><span class="hlb">Serial schedule</span>: A schedule that does NOT interleave actions of different transactions. T1 runs completely, then T2 runs completely (or vice versa).</li>
+      <li><span class="hlb">Equivalent schedules</span>: For any database state, executing schedule 1 produces the identical database state as executing schedule 2. (Same final values for all objects.)</li>
+      <li><span class="hlb">Serializable schedule</span>: A schedule that is equivalent to SOME serial execution of the transactions. The schedule may interleave, but the end result must match a serial run.</li>
+    </ul>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — The three anomalies shown as exact R/W schedules</div>
+        <p>The slides show all three anomalies using R/W notation. These are the exact layouts to memorise:</p>
+        <div class="schedule"><span style="color:var(--gold)">Anomaly 1 — Dirty Read (WR conflict):</span>
+T1:  R(A), W(A),                              R(B), W(B), <span style="color:var(--red)">Abort</span>
+T2:               R(A), W(A), <span style="color:var(--green)">Commit</span>
+
+T2 reads A after T1 wrote it, but T1 later aborts.
+T2 used a value that was rolled back — a "dirty" value.</div>
+
+        <div class="schedule"><span style="color:var(--gold)">Anomaly 2 — Unrepeatable Read (RW conflict):</span>
+T1:  R(A),                          R(A), W(A), <span style="color:var(--green)">Commit</span>
+T2:        R(A), W(A), <span style="color:var(--green)">Commit</span>
+
+T1 reads A, T2 changes A and commits, T1 reads A again.
+T1 gets TWO DIFFERENT VALUES for the same read within one transaction.</div>
+
+        <div class="schedule"><span style="color:var(--gold)">Anomaly 3 — Overwriting Uncommitted Data (WW conflict):</span>
+T1:  W(A),                   W(B), <span style="color:var(--green)">Commit</span>
+T2:        W(A), W(B), <span style="color:var(--green)">Commit</span>
+
+T1 writes A (not committed). T2 also writes A and B and commits.
+T1 then commits, overwriting T2's committed W(B) with T1's value.
+T2's write to B is silently lost.</div>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Computing the result of Schedule 2</div>
+        <p>Start: A=1000, B=2000. Schedule 2 (bad interleaving):</p>
+        <p>1. T1: R(A), W(A) → A becomes 1100. 2. T2: R(A) reads 1100, W(A) → A becomes 1100×1.06=1166. 3. T2: R(B) reads 2000, W(B) → B becomes 2000×1.06=2120. T2 Commits. 4. T1: R(B) reads 2120, W(B) → B becomes 2120-100=2020. T1 Commits.</p>
+        <p>Final: A=1166, B=2020. Total=3186.</p>
+        <p>But correct serial order T1→T2 gives: A=1100×1.06=1166, B=1900×1.06=2014. Total=3180. Different! The interleaving "created" 6 extra dollars — money appears from nowhere. This is why non-serializable schedules are wrong.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Verifying Schedule 1 is serializable</div>
+        <p>Start: A=1000, B=2000. Schedule 1 (OK interleaving):</p>
+        <p>1. T1: R(A), W(A) → A=1100. 2. T2: R(A) reads 1100, W(A) → A=1166. 3. T1: R(B), W(B) → B=1900. 4. T2: R(B) reads 1900, W(B) → B=2014.</p>
+        <p>Final: A=1166, B=2014. Total=3180. This matches T1 then T2 serially: A: 1000+100=1100→×1.06=1166 ✓. B: 2000-100=1900→×1.06=2014 ✓. Serializable confirmed.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- TOPIC: Cascading Aborts -->
+  <div class="topic" id="cascading">
+    <h3>Aborting a Transaction — Cascading Aborts and Why Strict 2PL Prevents Them <span class="sref">Slide ~251</span> <span class="from-slides">★ Slide Example</span></h3>
+    <p>The slides dedicate a full slide to this topic that the original guide folded into the locking discussion. It deserves separate treatment because it explains the "strict" in "Strict 2PL."</p>
+
+    <p>When transaction T<sub>i</sub> is aborted, all its changes must be undone — that's atomicity. But there's a more dangerous problem: if T<sub>j</sub> has already <em>read</em> a value that T<sub>i</sub> wrote (and T<sub>i</sub> is now aborting), T<sub>j</sub> must ALSO be aborted. Otherwise T<sub>j</sub> made decisions based on data that was rolled back — it's built on a lie. This is called a <span class="hl">cascading abort</span>.</p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Cascading aborts are catastrophic</strong>
+        <p>Imagine T<sub>j</sub> read T<sub>i</sub>'s dirty value and already committed. Now T<sub>i</sub> aborts. You can't un-commit T<sub>j</sub> — it already told the user "success!" You have a permanently inconsistent database. This is why the "strict" rule exists: prevent this possibility entirely.</p>
+      </div>
+    </div>
+
+    <p><strong>The solution: Strict 2PL holds ALL locks until commit time.</strong></p>
+    <p>If T<sub>i</sub> holds an X lock on object A until it commits (or aborts), then T<sub>j</sub> cannot read A until T<sub>i</sub> commits. If T<sub>i</sub> aborts, T<sub>j</sub> never saw T<sub>i</sub>'s dirty write — no cascading abort is possible.</p>
+
+    <p>The slides also explain how this connects to crash recovery: the DBMS maintains a log of all writes. At crash time, all transactions that were active (not yet committed) are aborted using the log. Since Strict 2PL prevents cascading aborts, you only need to undo the active transactions — not a potentially infinite chain of dependent transactions.</p>
+
+    <div class="examples">
+      <div class="ex-label">Examples</div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — The cascading abort scenario</div>
+        <p>From the slides exactly:</p>
+        <div class="schedule">T_i:  writes object A  ... later aborts
+T_j:  reads object A (T_i's uncommitted value) ... must also abort!
+
+Without Strict 2PL: T_j can read A immediately after T_i writes it.
+With Strict 2PL:    T_i holds X lock on A until commit/abort.
+                    T_j must wait. If T_i aborts, T_j never reads A.
+                    Cascading abort prevented.</div>
+        <p>The slide states: "If T<sub>i</sub> writes an object, T<sub>j</sub> can read this only after T<sub>i</sub> commits." This is the core guarantee of the strict policy.</p>
+      </div>
+      <div class="ex-card from-slide">
+        <div class="ex-n">★ Slide Example — Crash recovery connection</div>
+        <p>From the slides: "This mechanism [the log] is also used to recover from system crashes: all active transactions at the time of the crash are aborted when the system comes back up."</p>
+        <p>This connects Strict 2PL to ARIES recovery: because Strict 2PL prevents cascading aborts, when the system recovers from a crash, the UNDO phase only needs to undo transactions that were active at crash time. There's no need to hunt for a potentially infinite chain of transactions that read dirty values from aborted transactions. The system's correctness guarantees are bounded and tractable.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — The cascade without Strict 2PL</div>
+        <p>Without strict locking: T1 writes A=500 (not committed). T2 reads A=500 and makes a decision based on it, writes B=1000 (commits). T3 reads B=1000, commits. Now T1 aborts — A rolls back to A=300. T2's decision was wrong (it used A=500, not A=300) → T2 must abort. But T2 already committed! And T3 read T2's B=1000 which came from T2's wrong decision → T3 might also need aborting. The cascade can propagate through an arbitrary number of committed transactions. Catastrophic.</p>
+      </div>
+      <div class="ex-card">
+        <div class="ex-n">◆ Invented Example — Why "strict" adds to "2PL"</div>
+        <p>Regular 2PL: acquire all locks before releasing any (two phases: growing, shrinking). This prevents non-serializable schedules. But it allows releasing locks before commit — a transaction can release A's lock as soon as it's done with A, even before committing. Another transaction can then read A. If the first transaction later aborts → cascading abort risk.</p>
+        <p>Strict 2PL: hold ALL locks until commit/abort. No lock is ever released early. This adds the no-cascading-abort guarantee on top of serializability. The cost: slightly lower concurrency (other transactions must wait longer). The benefit: clean, safe abort behaviour and simple crash recovery.</p>
+      </div>
+    </div>
+
+    <div class="summary">
+      <h4>🔒 Transaction Management — Complete Picture</h4>
+      <ul>
+        <li><strong>Transactions</strong> = sequences of R() and W() operations. The DBMS doesn't understand application semantics — only reads and writes.</li>
+        <li><strong>Serializability</strong> = the correct-concurrency criterion. A schedule is correct if it produces the same result as some serial execution.</li>
+        <li><strong>Three anomalies</strong>: Dirty Read (WR), Unrepeatable Read (RW), Lost Update (WW). Each has a specific R/W schedule pattern shown in the slides — memorise them.</li>
+        <li><strong>Strict 2PL</strong>: S locks before reads, X locks before writes. All locks held until commit/abort. Prevents all three anomalies AND cascading aborts.</li>
+        <li><strong>Cascading aborts</strong>: If T<sub>i</sub> aborts and T<sub>j</sub> read T<sub>i</sub>'s dirty value, T<sub>j</sub> must also abort. Strict 2PL prevents this entirely by never allowing reads of uncommitted data.</li>
+        <li><strong>The log</strong>: Records (old value, new value) for every write. Log must go to disk BEFORE the changed page (WAL). Enables undo of aborted transactions and crash recovery.</li>
+        <li><strong>ARIES crash recovery</strong>: Analysis → Redo (replay everything) → Undo (rollback active transactions). Strict 2PL makes Undo bounded — only active transactions need undoing.</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <p>CS281 — Computers &amp; Data Organization · Bilkent University · Dr. Mustafa Değerli</p>
+  <p style="margin-top:8px; font-size:12px;">Supplement to Guide 2 (Slides 145–263). Covers: What 3NF Achieves · Refining ER Diagrams · BCNF + Dep. Preservation · 3NF Decomposition Algorithm · Cost Table Explanations · Understanding Workload · Prefix Key Compression · A Note on Order · LH as Variant of EH · Exact T1/T2 Schedules · Cascading Aborts</p>
+</footer>
+
+</body>
+</html>

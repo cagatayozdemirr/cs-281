@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CS281 Study Guide — Slides 145–263</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1f2937;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --accent1: #58a6ff;  /* blue */
+    --accent2: #3fb950;  /* green */
+    --accent3: #f0883e;  /* orange */
+    --accent4: #d2a8ff;  /* purple */
+    --accent5: #ff7b72;  /* red */
+    --accent6: #79c0ff;  /* light blue */
+    --gold: #e3b341;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2332 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%; transform: translateX(-50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(88,166,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .course-tag {
+    display: inline-block;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.3);
+    color: var(--accent1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    color: var(--text);
+    margin-bottom: 12px;
+    line-height: 1.2;
+  }
+  header p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 600px;
+    margin: 0 auto 24px;
+  }
+
+  /* ── NAVIGATION ── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 40px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  nav a:hover {
+    color: var(--accent1);
+    border-color: rgba(88,166,255,0.3);
+    background: rgba(88,166,255,0.06);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+  }
+
+  /* ── CHAPTER SECTIONS ── */
+  .chapter {
+    margin-bottom: 72px;
+  }
+  .chapter-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-bottom: 36px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapter-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent1);
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.2);
+    padding: 6px 10px;
+    border-radius: 6px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    margin-top: 6px;
+    text-transform: uppercase;
+  }
+  .chapter-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--text);
+    line-height: 1.25;
+  }
+  .chapter-header .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  /* ── TOPIC BLOCKS ── */
+  .topic {
+    margin-bottom: 40px;
+  }
+  .topic h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--accent1);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .topic h3 .slide-ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--muted);
+    background: var(--surface2);
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+  .topic p, .topic li {
+    color: #cdd5e0;
+    margin-bottom: 10px;
+  }
+  .topic ul, .topic ol {
+    padding-left: 22px;
+  }
+  .topic li {
+    margin-bottom: 6px;
+  }
+
+  /* ── EXAMPLES ── */
+  .examples {
+    margin-top: 20px;
+  }
+  .examples-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .examples-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(63,185,80,0.2);
+  }
+  .example-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+  .example-card .ex-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .example-card p {
+    color: #cdd5e0;
+    margin: 0;
+    font-size: 15px;
+  }
+  .example-card strong {
+    color: var(--text);
+  }
+
+  /* ── CALLOUT BOXES ── */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 20px 0;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .callout-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-body strong { display: block; margin-bottom: 4px; font-size: 14px; }
+  .callout-body p { margin: 0; font-size: 14.5px; color: inherit; opacity: 0.9; }
+  .callout.tip { background: rgba(63,185,80,0.08); border: 1px solid rgba(63,185,80,0.25); color: #7ee787; }
+  .callout.warn { background: rgba(240,136,62,0.08); border: 1px solid rgba(240,136,62,0.25); color: var(--accent3); }
+  .callout.info { background: rgba(88,166,255,0.08); border: 1px solid rgba(88,166,255,0.25); color: var(--accent1); }
+  .callout.key { background: rgba(227,179,65,0.08); border: 1px solid rgba(227,179,65,0.25); color: var(--gold); }
+
+  /* ── CODE BLOCKS ── */
+  .code-block {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: #e6edf3;
+    overflow-x: auto;
+    margin: 16px 0;
+    white-space: pre;
+    line-height: 1.6;
+  }
+  .kw { color: #ff7b72; }
+  .str { color: #a5d6ff; }
+  .cm { color: #8b949e; font-style: italic; }
+  .num { color: var(--accent2); }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .compare-table th {
+    background: var(--surface2);
+    color: var(--accent1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .compare-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    color: #cdd5e0;
+    vertical-align: top;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .good { color: var(--accent2); }
+  .bad { color: var(--accent5); }
+  .ok { color: var(--accent3); }
+
+  /* ── DIAGRAM ASCII ── */
+  .diagram {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: #79c0ff;
+    overflow-x: auto;
+    margin: 16px 0;
+    line-height: 1.8;
+    white-space: pre;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  /* ── HIGHLIGHT ── */
+  .hl { color: var(--gold); font-weight: 600; }
+  .hl-blue { color: var(--accent1); font-weight: 600; }
+  .hl-green { color: var(--accent2); font-weight: 600; }
+  .hl-red { color: var(--accent5); font-weight: 600; }
+  .hl-purple { color: var(--accent4); font-weight: 600; }
+
+  /* ── PILL TAGS ── */
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-right: 4px;
+    font-weight: 600;
+  }
+  .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent1); }
+  .tag-green { background: rgba(63,185,80,0.15); color: var(--accent2); }
+  .tag-orange { background: rgba(240,136,62,0.15); color: var(--accent3); }
+  .tag-red { background: rgba(255,123,114,0.15); color: var(--accent5); }
+
+  /* ── SUMMARY BOX ── */
+  .summary-box {
+    background: linear-gradient(135deg, rgba(88,166,255,0.06), rgba(210,168,255,0.06));
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin: 24px 0;
+  }
+  .summary-box h4 {
+    color: var(--accent4);
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .summary-box ul { padding-left: 20px; }
+  .summary-box li { color: #cdd5e0; margin-bottom: 6px; font-size: 14.5px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="course-tag">CS281 · Bilkent University</div>
+  <h1>Computer & Data Organization<br>Exam Study Guide</h1>
+  <p>Slides 145–263 explained from scratch, with at least 3 examples per topic. Written for someone who missed lectures.</p>
+</header>
+
+<nav>
+  <a href="#ch9">Ch.9 Schema Refinement</a>
+  <a href="#ch10">Ch.10 Storage & Indexing</a>
+  <a href="#ch11">Ch.11 Tree Indexes</a>
+  <a href="#ch12">Ch.12 Hash Indexes</a>
+  <a href="#ch13">Ch.13 Transactions</a>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 9 — Schema Refinement & Normal Forms
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch9">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 9 · Slides 145–169</div>
+    <div>
+      <h2>Schema Refinement &amp; Normal Forms</h2>
+      <div class="subtitle">Functional Dependencies, BCNF, 3NF, Decomposition</div>
+    </div>
+  </div>
+
+  <!-- TOPIC 1: Redundancy -->
+  <div class="topic">
+    <h3>The Problem: Redundancy <span class="slide-ref">Slide 146</span></h3>
+    <p>Imagine you're building a database for a company. You have one big table with employee information. <span class="hl">Redundancy</span> means the same piece of information is stored multiple times. This sounds harmless, but it causes serious problems called <strong>anomalies</strong>.</p>
+
+    <p>There are three kinds of anomalies:</p>
+    <ul>
+      <li><span class="hl-blue">Update anomaly</span>: You have to update the same fact in multiple rows. If you forget one, your data is inconsistent.</li>
+      <li><span class="hl-blue">Insert anomaly</span>: You can't add some information without also adding other unrelated information.</li>
+      <li><span class="hl-blue">Deletion anomaly</span>: Deleting a row accidentally destroys information you still needed.</li>
+    </ul>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Update Anomaly</div>
+        <p>You have a table: <strong>Employee(SSN, Name, Department, DeptPhone)</strong>. The phone for the "Engineering" department is stored in every Engineering employee's row. If the phone number changes, you must update 50 rows. If you miss even one, your database has two different phone numbers for the same department — a contradiction.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Insertion Anomaly</div>
+        <p>Same table. You want to record that a new department "Marketing" exists with phone 555-1234, but you have no employees yet. You <strong>can't insert the department</strong> because every row requires an employee SSN. The fact gets lost.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Deletion Anomaly</div>
+        <p>The slides' own example: <strong>Hourly_Emps(SSN, Name, Lot, Rating, HrlyWage, HrsWorked)</strong> where Rating → HrlyWage (rating determines the wage). If you delete the only employee with Rating=5, you lose the information that "Rating 5 pays $7/hour" forever.</p>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body">
+        <strong>The fix: Decomposition</strong>
+        <p>Split the big table into smaller tables. Instead of one SNLRWH table, have SNLRH (employee data) and RW (rating → wage mapping). Now the wage for Rating 5 lives in RW and won't be lost when an employee is deleted.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 2: Functional Dependencies -->
+  <div class="topic">
+    <h3>Functional Dependencies (FDs) <span class="slide-ref">Slides 147–150</span></h3>
+    <p>A <span class="hl">Functional Dependency</span> is a rule that says: "if two rows agree on these columns, they <em>must</em> agree on those other columns." Written as <strong>X → Y</strong>, pronounced "X determines Y".</p>
+    <p>Think of it like: knowing X gives you Y for free — you don't even need to look at any other column.</p>
+
+    <div class="callout info">
+      <div class="callout-icon">📐</div>
+      <div class="callout-body">
+        <strong>Formal definition</strong>
+        <p>X → Y holds over relation R if: for every two tuples t1 and t2 in R, whenever t1 and t2 have the same X values, they also have the same Y values. There are no exceptions allowed.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — SSN → Name (the classic)</div>
+        <p>In an employee table, your Social Security Number uniquely identifies you. So: <strong>SSN → Name</strong>. Two rows with the same SSN must have the same name. (One person can't have two names in the same database.)</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Rating → HrlyWage (the slides' example)</div>
+        <p>The company pays everyone with the same performance rating the same hourly wage. So <strong>Rating → HrlyWage</strong>. If two employees both have Rating=8, they must both earn $10/hour. This FD causes the redundancy problem above.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — ZipCode → City</div>
+        <p>In a US address table: <strong>ZipCode → City</strong>. Every 5-digit zip code belongs to exactly one city. Two rows with ZipCode=90210 must both say City="Beverly Hills". But City does NOT determine ZipCode (Beverly Hills could span multiple zips).</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 4 — Candidate Key</div>
+        <p>A <strong>candidate key</strong> is an attribute (or set) that determines all other attributes. If SSN is a key for Employees(SSN, Name, Dept, Salary), then <strong>SSN → SSN, Name, Dept, Salary</strong> — SSN determines everything. But SSN alone must be minimal: no proper subset of {SSN} should also determine everything.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 3: Armstrong's Axioms -->
+  <div class="topic">
+    <h3>Reasoning About FDs — Armstrong's Axioms <span class="slide-ref">Slides 151–153</span></h3>
+    <p>If you know some FDs, you can <em>derive</em> new ones using three rules called <span class="hl">Armstrong's Axioms</span>. These are proven to be both correct (sound) and complete.</p>
+
+    <table class="compare-table">
+      <tr><th>Rule</th><th>What It Says</th><th>Memory Trick</th></tr>
+      <tr><td><strong>Reflexivity</strong></td><td>If Y is a subset of X, then X → Y. E.g., {SSN, Name} → {Name}.</td><td>"A superset always determines its subsets." Obvious stuff.</td></tr>
+      <tr><td><strong>Augmentation</strong></td><td>If X → Y, then XZ → YZ (add same thing to both sides).</td><td>"Adding the same column to both sides preserves the dependency."</td></tr>
+      <tr><td><strong>Transitivity</strong></td><td>If X → Y and Y → Z, then X → Z.</td><td>Like math: if A=B and B=C, then A=C.</td></tr>
+    </table>
+
+    <p>Two useful derived rules:</p>
+    <ul>
+      <li><strong>Union</strong>: If X→Y and X→Z, then X→YZ (X determines both, so it determines their union).</li>
+      <li><strong>Decomposition</strong>: If X→YZ, then X→Y and X→Z separately.</li>
+    </ul>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Transitivity</div>
+        <p>Given: <strong>SSN → DeptID</strong> (employee belongs to one dept) and <strong>DeptID → ParkingLot</strong> (each dept has one lot). By transitivity: <strong>SSN → ParkingLot</strong>. We can derive where an employee parks just from their SSN.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Augmentation</div>
+        <p>Given: <strong>Rating → Wage</strong>. By augmentation: <strong>{Rating, SSN} → {Wage, SSN}</strong>. Adding SSN to both sides doesn't break the dependency — it's just a trivial extension.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Chaining from the slides</div>
+        <p>Contracts(cid, sid, jid, did, pid, qty, value). Given: <strong>JP→C</strong> and <strong>C→CSJDPQV</strong> (C is the key). By transitivity: <strong>JP→CSJDPQV</strong>. Also: <strong>SD→P</strong> implies by augmentation: <strong>SDJ→JP</strong>. Then by transitivity: <strong>SDJ→CSJDPQV</strong>.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 4: Attribute Closure -->
+  <div class="topic">
+    <h3>Attribute Closure — Checking if an FD Holds <span class="slide-ref">Slide 153</span></h3>
+    <p>Given a set of FDs, how do you check whether a new FD like A→E is also implied? You compute the <span class="hl">attribute closure</span> of A, written A⁺. This is "all attributes that A can determine, directly or by transitivity."</p>
+
+    <p><strong>Algorithm:</strong> Start with the set {A}. Repeatedly: if you see any FD whose left side is already in your set, add its right side. Stop when nothing new can be added.</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — From the slides: Does A→E hold?</div>
+        <p>FDs: <strong>A→B, B→C, CD→E</strong>. Does A→E?
+        <br>Start: A⁺ = {A}
+        <br>A→B fires: A⁺ = {A, B}
+        <br>B→C fires: A⁺ = {A, B, C}
+        <br>CD→E: we have C but not D, so it can't fire yet. E is not in A⁺.
+        <br><strong>Answer: No, A→E does NOT hold with these FDs alone.</strong></p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Is {SSN} a key?</div>
+        <p>Table: Employee(SSN, Name, Dept, Salary). FDs: SSN→Name, SSN→Dept, SSN→Salary.
+        <br>Compute SSN⁺: start {SSN}. Add Name, Dept, Salary. SSN⁺ = {SSN, Name, Dept, Salary}.
+        <br>Since SSN⁺ = all attributes, <strong>SSN is a candidate key</strong>.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — A more complex closure</div>
+        <p>FDs: A→BC, B→D, CD→E. Compute A⁺.
+        <br>Start: {A} → A→BC fires → {A,B,C} → B→D fires → {A,B,C,D} → CD→E fires → {A,B,C,D,E}.
+        <br>So A determines everything: A is a key for ABCDE.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 5: BCNF -->
+  <div class="topic">
+    <h3>Boyce-Codd Normal Form (BCNF) <span class="slide-ref">Slides 154–155</span></h3>
+    <p>BCNF is the "ideal" normal form. A relation is in <span class="hl">BCNF</span> if every non-trivial functional dependency has a <strong>superkey on its left side</strong>. In other words: the only things that "determine" other things should be keys (or superkeys). No column should determine another column unless it's a key.</p>
+
+    <div class="callout info">
+      <div class="callout-icon">📋</div>
+      <div class="callout-body">
+        <strong>Formal rule: R is in BCNF if, for every FD X→A in F⁺:</strong>
+        <p>Either (1) A is in X (trivial FD — A is part of the left side), OR (2) X is a superkey of R.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — BCNF Violation</div>
+        <p>Table: <strong>SNLRWH</strong> (SSN, Name, Lot, Rating, Wage, Hours). Key is S (SSN). FD: <strong>R→W</strong> (Rating determines Wage). Is this BCNF? R is NOT a superkey (it doesn't uniquely identify employees). So R→W violates BCNF. Fix: split into SNLRH and RW.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — BCNF-Compliant Table</div>
+        <p>After splitting: <strong>Wages(Rating, HrlyWage)</strong> with key=Rating. The only non-trivial FD here is Rating→HrlyWage, and Rating IS the key. So this table IS in BCNF. ✓</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Student Courses</div>
+        <p>Table: <strong>StudentCourse(StudentID, CourseID, InstructorID)</strong>. Say each course has exactly one instructor: <strong>CourseID→InstructorID</strong>. If the key is {StudentID, CourseID}, then CourseID alone is not a key — BCNF violated! Fix: split into Course(CourseID, InstructorID) and Enrollment(StudentID, CourseID).</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 6: 3NF -->
+  <div class="topic">
+    <h3>Third Normal Form (3NF) — The Compromise <span class="slide-ref">Slides 156–158</span></h3>
+    <p>Sometimes BCNF decomposition forces you to lose information about FDs (you can't check them without doing a join). <span class="hl">3NF</span> is a slightly weaker condition that avoids this. It allows one extra escape: a column A can be "determined by" a non-key X, as long as A is part of some candidate key of the relation.</p>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>3NF Rule: R is in 3NF if, for every FD X→A in F⁺:</strong>
+        <p>Either (1) trivial FD, OR (2) X is a superkey, OR (3) A is part of some candidate key of R.</p>
+      </div>
+    </div>
+
+    <p>The key insight: <span class="hl-green">BCNF implies 3NF</span>, but not vice versa. 3NF allows a little redundancy but guarantees that a lossless-join, dependency-preserving decomposition always exists.</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — 3NF but not BCNF</div>
+        <p>Table: <strong>Reserves(SailorID, BoatID, DayID, CreditCardID)</strong>. FDs: S→C (sailor has one card) and C→S (card belongs to one sailor). Keys are {S,B,D} and {C,B,D}. The FD S→C violates BCNF (S is not a key). But C is part of key {C,B,D}, so 3NF is satisfied. This table stays in 3NF even though there's some redundancy.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Why 3NF allows redundancy</div>
+        <p>In the Reserves example, for every reservation of sailor S, we store the (S,C) pair again. If a sailor has 10 reservations, we redundantly store their credit card 10 times. That's the price of 3NF vs BCNF.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — When to use 3NF</div>
+        <p>If decomposing to BCNF would lose a critical FD (making it impossible to enforce without joining tables), use 3NF instead. It's a practical compromise: some redundancy in exchange for being able to check all constraints locally within each table.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 7: Decomposition -->
+  <div class="topic">
+    <h3>Decomposition: Lossless-Join &amp; Dependency-Preserving <span class="slide-ref">Slides 159–166</span></h3>
+    <p>When we split a table R into smaller tables, we need two guarantees:</p>
+    <ol>
+      <li><span class="hl-blue">Lossless-Join</span>: When we join the pieces back together, we get exactly the original data — not more, not less. No "spurious tuples" (fake rows that weren't there originally).</li>
+      <li><span class="hl-blue">Dependency-Preserving</span>: Every original FD can still be checked by looking at just one of the smaller tables. We don't need to do a join to enforce any constraint.</li>
+    </ol>
+
+    <div class="callout tip">
+      <div class="callout-icon">✅</div>
+      <div class="callout-body">
+        <strong>Lossless-join test</strong>
+        <p>Decomposing R into X and Y is lossless-join if and only if: (X∩Y) → X, OR (X∩Y) → Y. That is, the shared columns between the two tables determine at least one of them entirely.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Lossless decomposition</div>
+        <p>Table SNLRWH, FDs include R→W. Decompose into SNLRH and RW. Shared column: R. Does R→RW? Yes (R determines W, and trivially R→R). So this IS lossless. Joining on R gives back the original table. ✓</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Lossy (bad) decomposition</div>
+        <p>Table: ABC with no FDs. Decompose into AB and BC. Shared column is B. B does NOT determine A or C (no FDs exist). Joining AB and BC on B produces extra rows — spurious tuples. This is a <strong>lossy</strong> decomposition. Bad! ✗</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Dependency preservation failure</div>
+        <p>Table CSJDPQV, key=C, FDs: JP→C, SD→P, J→S. BCNF decomposition gives: SDP, JS, CJDQV. The FD JP→C involves J (in CJDQV) and P (in SDP but not CJDQV). To check JP→C, you must join CJDQV with SDP. This decomposition is <strong>not dependency-preserving</strong>. A solution: add table JPC explicitly just for enforcement.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC 8: BCNF Decomposition Algorithm -->
+  <div class="topic">
+    <h3>BCNF Decomposition Algorithm <span class="slide-ref">Slides 167–169</span></h3>
+    <p>To decompose R into BCNF: find any FD X→Y that violates BCNF (X is not a superkey). Replace R with two relations: <strong>(R − Y)</strong> and <strong>XY</strong>. Repeat until all relations are in BCNF.</p>
+
+    <div class="diagram">BCNF Decomposition Algorithm:
+
+Input: Relation R, set of FDs F
+1. If R is already in BCNF, done.
+2. Find a violating FD X→Y (X is not a superkey of R).
+3. Split R into:
+     R1 = R − Y   (everything except Y)
+     R2 = X ∪ Y   (the violating dependency becomes its own table)
+4. Recurse on R1 and R2 with their projected FDs.</div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Simple decomposition</div>
+        <p>SNLRWH, key=S, violating FD: R→W. Split:
+        <br>• R1 = SNLRH (remove W from main table)
+        <br>• R2 = RW (the offending dependency becomes its own table)
+        <br>Both R1 (key=S) and R2 (key=R) are now in BCNF.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Multi-step decomposition</div>
+        <p>CSJDPQV, key=C, violating FDs: SD→P, J→S.
+        <br>Step 1: SD→P violated. Split into SDP and CSJDQV.
+        <br>Step 2: J→S violates BCNF in CSJDQV. Split into JS and CJDQV.
+        <br>Final: SDP, JS, CJDQV — all in BCNF.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Order matters!</div>
+        <p>With multiple violating FDs, the order in which you pick them affects the final decomposition. Different choices can yield very different sets of tables. This is not a bug — it's expected. The algorithm guarantees BCNF and lossless-join, but not always dependency preservation.</p>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <h4>🗺 Schema Refinement Summary</h4>
+      <ul>
+        <li>Redundancy causes update, insert, and deletion anomalies — solve with decomposition.</li>
+        <li>FDs formally capture which columns determine which others.</li>
+        <li>BCNF = only keys can determine non-trivial attributes. Best at eliminating redundancy.</li>
+        <li>3NF = slightly weaker; always allows lossless-join + dependency-preserving decomposition.</li>
+        <li>Always aim for lossless-join. Dependency preservation is desired but sometimes impossible with BCNF.</li>
+        <li>Minimal cover: smallest set of FDs that captures the same closure — used for 3NF decomposition.</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 10 — Storage & Indexing
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch10">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 10 · Slides 170–195</div>
+    <div>
+      <h2>Overview of Storage &amp; Indexing</h2>
+      <div class="subtitle">File Organizations, Indexes, Cost Analysis</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: External Storage -->
+  <div class="topic">
+    <h3>Data on External Storage — Why It Matters <span class="slide-ref">Slide 171</span></h3>
+    <p>Databases store data on <span class="hl">disks</span> (external storage), not in RAM. This is the fundamental performance challenge. Disks are <em>thousands of times slower</em> than RAM. Every design decision in a database is driven by minimizing disk reads/writes.</p>
+    <ul>
+      <li><strong>Disks:</strong> You can jump to any page at a fixed cost (random access). But reading several consecutive pages is much cheaper than jumping around randomly — sequential reads are faster.</li>
+      <li><strong>Tapes:</strong> Even cheaper but you can only read sequentially. Used for backups and archives.</li>
+      <li><strong>Buffer Pool:</strong> The DBMS keeps frequently-used pages in RAM (a "buffer pool") to avoid re-reading from disk.</li>
+    </ul>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Analogy: Library Books</div>
+        <p>Think of the disk as a huge library. RAM is your desk. It's fast to work with books on your desk, slow to walk to the library and back. The buffer pool = the books currently on your desk. A database tries to keep the books you'll need next on your desk already.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Sequential vs. Random</div>
+        <p>Reading 1,000 consecutive pages from disk: fast (disk head moves forward smoothly). Reading 1,000 random pages scattered across the disk: extremely slow (disk head must seek back and forth). A full table scan (reading the whole file) is often faster than random access for the same data, which is why clustering matters so much.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Record ID (rid)</div>
+        <p>Every record on disk gets a unique identifier called a <strong>rid</strong> (record ID), which encodes which page and which slot within that page. An index stores rids so it can say "here's where to find this record on disk" without scanning the whole file.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: File Organizations -->
+  <div class="topic">
+    <h3>Three Ways to Organize Files <span class="slide-ref">Slides 172–173</span></h3>
+    <p>There are three main ways to physically arrange records on disk. Each has different performance for different operations:</p>
+
+    <table class="compare-table">
+      <tr><th>Organization</th><th>What It Is</th><th>Best For</th><th>Worst For</th></tr>
+      <tr>
+        <td><strong>Heap File</strong></td>
+        <td>Records are inserted in any order (end of file). No sorting.</td>
+        <td class="good">Full table scans — reading everything</td>
+        <td class="bad">Finding specific records quickly</td>
+      </tr>
+      <tr>
+        <td><strong>Sorted File</strong></td>
+        <td>Records are kept sorted by some field (e.g., age). Like a sorted phone book.</td>
+        <td class="good">Range queries ("all employees age 30–40")</td>
+        <td class="bad">Insertions (must maintain sort order)</td>
+      </tr>
+      <tr>
+        <td><strong>Index File</strong></td>
+        <td>A separate structure (B+ tree or hash table) that points to records by key value.</td>
+        <td class="good">Selective searches, updates</td>
+        <td class="ok">Slight overhead on updates</td>
+      </tr>
+    </table>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Heap File</div>
+        <p>An employee HR table where you always SELECT * (dump all records). A heap file is perfect — just scan from start to end. No structure needed. Inserting a new employee is also instant: just append to the end of the file.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Sorted File</div>
+        <p>A bank's transaction log sorted by date. "Show me all transactions from January" is a range query. Binary search finds January 1st quickly, then you scan forward. But inserting a transaction from 3 years ago means shifting many records — expensive!</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Index</div>
+        <p>An index on employee ID in a company database. "Find employee 47382" uses the index to jump directly to that record's disk location — you don't scan the whole file. Much faster for point lookups, and updates are much easier than maintaining a sorted file.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Index Alternatives -->
+  <div class="topic">
+    <h3>What Does an Index Store? — Three Alternatives <span class="slide-ref">Slides 174–176</span></h3>
+    <p>An index stores "data entries" k* for each key k. There are three ways to define what k* means:</p>
+
+    <table class="compare-table">
+      <tr><th>Alternative</th><th>What k* Contains</th><th>Trade-off</th></tr>
+      <tr><td><strong>Alt 1</strong></td><td>The full data record itself (the index IS the file)</td><td>Only one such index possible. Large entries.</td></tr>
+      <tr><td><strong>Alt 2</strong></td><td>&lt;key, rid&gt; — key + pointer to one record</td><td>Small entries. Good if duplicates are rare.</td></tr>
+      <tr><td><strong>Alt 3</strong></td><td>&lt;key, list of rids&gt; — key + list of pointers</td><td>Even more compact for duplicates, but variable-size entries.</td></tr>
+    </table>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Alt 1: Phone book analogy</div>
+        <p>The phone book itself IS the index (sorted by name, contains full address). You can't have two phone books sorted differently with the full address in each — that's duplicate storage. That's why Alt 1 can only be used for one index per table.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Alt 2: Card catalog in old library</div>
+        <p>The card catalog has an index card saying "Shakespeare, William → Shelf B7, Row 3." The card is tiny (just the name and location). The actual book is elsewhere. This is Alt 2: the index entry is &lt;author_name, page_id&gt;.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Alt 3: Multiple locations</div>
+        <p>If many books have the same author (like Stephen King wrote 50 books), Alt 3 stores: &lt;"Stephen King", [shelf1, shelf4, shelf7, ...]&gt;. One entry, many locations. More compact than Alt 2 (which would have 50 separate entries), but the entry is variable-length.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Index Classification -->
+  <div class="topic">
+    <h3>Clustered vs. Unclustered Indexes <span class="slide-ref">Slides 177–178</span></h3>
+    <p>This is one of the most important distinctions in indexing and a likely exam topic!</p>
+    <ul>
+      <li><span class="hl-blue">Clustered Index</span>: The physical order of records on disk matches the order of the index. Like a sorted file. Data entries and data records are "in sync." Only ONE clustered index per table is possible.</li>
+      <li><span class="hl-red">Unclustered Index</span>: The index is sorted, but the actual records on disk are in a different order. You might have to jump all over the disk to retrieve matching records.</li>
+    </ul>
+
+    <div class="callout warn">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body">
+        <strong>Why clustering matters enormously for range queries</strong>
+        <p>For a clustered index on age, "find all employees aged 30–40" reads a contiguous block of disk — one sequential scan. For an unclustered index, each matching record might be on a different page — potentially one disk I/O per record!</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Clustered: Dictionary</div>
+        <p>A dictionary is clustered on the word. Words appear physically in alphabetical order. Finding all words starting with "pre-" is fast — just flip to the P section and scan a few pages forward. The physical layout matches the logical order.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Unclustered: Book index</div>
+        <p>The index at the back of a textbook lists topics alphabetically, but the referenced pages are scattered: "Binary trees: pages 34, 89, 156, 203." You must flip back and forth across the book. Unclustered indexes are like this — the index is sorted, but your data jumps around disk.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Only one clustered index</div>
+        <p>Employee table. You can cluster on either DepartmentID or Salary, but not both simultaneously. If clustered on DeptID, then "find all employees in Dept 5" is fast (all Dept 5 employees are together). But "find all employees earning $50K–$60K" is slow — their records are scattered.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Cost Model -->
+  <div class="topic">
+    <h3>Cost Analysis — How We Compare File Organizations <span class="slide-ref">Slides 180–186</span></h3>
+    <p>The course uses a simplified model to compare performance. We count only <span class="hl">disk I/O page reads/writes</span>, ignoring CPU cost.</p>
+
+    <p>Variables:</p>
+    <ul>
+      <li><strong>B</strong> = number of data pages in the file</li>
+      <li><strong>R</strong> = records per page</li>
+      <li><strong>D</strong> = time to read or write one disk page (in ms)</li>
+    </ul>
+
+    <table class="compare-table">
+      <tr><th>Organization</th><th>Scan</th><th>Equality Search</th><th>Range</th><th>Insert</th><th>Delete</th></tr>
+      <tr><td><strong>(1) Heap</strong></td><td>BD</td><td>0.5BD</td><td>BD</td><td>2D</td><td>Search + D</td></tr>
+      <tr><td><strong>(2) Sorted</strong></td><td>BD</td><td>D·log₂B</td><td>D·log₂B + matches</td><td>Search + BD</td><td>Search + BD</td></tr>
+      <tr><td><strong>(3) Clustered B+</strong></td><td>1.5BD</td><td>D·log<sub>F</sub>(1.5B)</td><td>D·log<sub>F</sub>(1.5B) + matches</td><td>Search + D</td><td>Search + D</td></tr>
+      <tr><td><strong>(4) Unclustered Tree</strong></td><td>BD(R+0.15)</td><td>D(1+log<sub>F</sub> 0.15B)</td><td>D·log<sub>F</sub>(0.15B) + matches</td><td>D(3+log<sub>F</sub> 0.15B)</td><td>Search + 2D</td></tr>
+      <tr><td><strong>(5) Unclustered Hash</strong></td><td>BD(R+0.125)</td><td>2D</td><td>BD</td><td>4D</td><td>Search + 2D</td></tr>
+    </table>
+
+    <div class="examples">
+      <div class="examples-title">Examples to understand the table</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Heap: Equality Search = 0.5BD</div>
+        <p>To find one specific record in an unsorted heap, you scan until you find it. On average you find it halfway through — so you read 0.5 × B pages, costing 0.5BD. In the worst case it's the last record (BD). Best case it's first (D).</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Sorted file: Equality = D·log₂B</div>
+        <p>Binary search! With B pages, you need log₂B comparisons to find the right page, each costing D. If B=1024 pages, log₂(1024) = 10 page reads vs. 512 for heap. Huge win for equality. But inserting requires shifting pages to maintain order — costs BD.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Unclustered index: worst case</div>
+        <p>If a range query returns 1,000 matching records scattered across the disk, and each record is on a different page, you need 1,000 page reads — one per matching record. This is why unclustered indexes are terrible for range queries on large result sets. Cost = number of matching records × D.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Index Selection -->
+  <div class="topic">
+    <h3>Choosing the Right Index <span class="slide-ref">Slides 187–194</span></h3>
+    <p>The choice of which index to build is crucial for performance. Key guidelines:</p>
+    <ul>
+      <li>Attributes in <strong>WHERE clauses</strong> are candidates for index keys.</li>
+      <li><strong>Exact match (=) queries</strong> → Hash index is best (constant time lookup).</li>
+      <li><strong>Range queries</strong> → Tree index (B+ tree) is best. Hash can't support ranges!</li>
+      <li>One index per table can be <strong>clustered</strong> — choose the one that helps the most important range queries.</li>
+      <li><strong>Composite index</strong>: if WHERE has multiple conditions, a multi-attribute key index can help.</li>
+    </ul>
+
+    <div class="callout tip">
+      <div class="callout-icon">🎯</div>
+      <div class="callout-body">
+        <strong>Index-only plans</strong>
+        <p>Sometimes a query can be answered using ONLY the index, without reading the actual data records. If SELECT asks only for columns that are all in the index key, the DBMS never touches the data file. This is extremely fast. Example: index on (dept, salary), query SELECT dept, COUNT(*) GROUP BY dept — only the index is needed.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Choose clustered for range queries</div>
+        <p>Query: "Find all employees aged 30–50." There are many such employees. A clustered B+ tree on age reads them all in one sequential scan. An unclustered index would need one disk I/O per employee — potentially thousands of random reads.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Composite key ordering matters</div>
+        <p>WHERE age=30 AND salary > 40000. Index on &lt;age, salary&gt;: find all age=30 entries, then scan by salary (sorted within age). Index on &lt;salary, age&gt;: finds salary range first, then you must check each for age=30. The first order is much better for this query.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Index maintenance overhead</div>
+        <p>Every time you INSERT, UPDATE, or DELETE, every index on that table must be updated too. A table with 5 indexes pays 5× the update cost vs. a heap. Choose indexes carefully — only build them if the query speedup outweighs the update overhead.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 11 — Tree-Structured Indexes
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch11">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 11 · Slides 196–221</div>
+    <div>
+      <h2>Tree-Structured Indexes</h2>
+      <div class="subtitle">ISAM, B+ Trees, Insert, Delete, Bulk Loading</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: Why Tree Indexes -->
+  <div class="topic">
+    <h3>Why Tree Indexes? Range Searches <span class="slide-ref">Slides 197–198</span></h3>
+    <p>Suppose you want to find all students with GPA above 3.0. If the data is sorted, you can binary search for the first student with GPA 3.0, then scan forward. But binary search on a large file still needs log₂(N) disk reads. The solution: build an <span class="hl">index file</span> — a smaller sorted structure that points into the data file.</p>
+    <p>Apply the idea recursively: build an index on the index — that's a tree!</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — The index idea</div>
+        <p>Data file: 1 million pages. Index file: 1,000 pages (one entry per data page). To find a record, binary search the index (10 reads), then go to the data page (1 read) = 11 reads total vs. ~500,000 reads for a full scan.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Range search with tree</div>
+        <p>"Find all employees with salary 50,000–70,000." Tree traversal finds the leaf with salary=50,000, then you scan leaf pages forward (they're linked!) until you pass 70,000. This is one of the key advantages of B+ trees over hash indexes.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — ISAM vs B+ tree preview</div>
+        <p>ISAM (Index Sequential Access Method) is a static tree — great when data doesn't change. B+ tree is dynamic — it automatically re-balances when records are inserted or deleted. In real databases, B+ trees win because data always changes.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: ISAM -->
+  <div class="topic">
+    <h3>ISAM — The Static Tree Index <span class="slide-ref">Slides 199–202</span></h3>
+    <p>ISAM works by building a tree at creation time. Leaf pages contain the actual data entries. Non-leaf pages contain index entries that guide your search downward. The structure is <span class="hl">static</span> — the tree itself never changes after creation. Only leaf pages get modified (via overflow pages for extra insertions).</p>
+
+    <div class="diagram">ISAM tree structure:
+
+         Root
+          |
+     [40]
+    /        \
+[20][33]    [51][63]
+  /    |      |    \
+Leaf  Leaf  Leaf  Leaf   ← Primary pages (fixed at creation)
+                  |
+               [overflow]  ← Overflow page (created when leaf is full)</div>
+
+    <p><strong>Problem:</strong> As you insert many records, overflow chains grow long and performance degrades. The tree itself never gets re-balanced.</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Search in ISAM</div>
+        <p>Find record 37 in the tree above. Start at root: 37 < 40, go left child. Node has 20 and 33. 20 < 37 and 33 < 37, go to rightmost child. That leaf page contains records 33–39. Scan to find 37. Total cost: height of tree + 1 page.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Insert causing overflow</div>
+        <p>Insert records 23, 48, 41, 42 into the tree. They go to the appropriate leaf pages. If a leaf is full, an overflow page is chained to it. The tree structure (non-leaf pages) stays the same — only the leaf level changes. After many inserts, searching requires checking overflow pages, slowing things down.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Delete in ISAM</div>
+        <p>Delete record 42. Find it in the overflow page, remove it. If the overflow page becomes empty, de-allocate it. The non-leaf pages are NEVER changed, even if this means the non-leaf page says "51" but 51 doesn't exist anymore at the leaf level — a ghost entry. (ISAM tolerates this.)</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: B+ Tree -->
+  <div class="topic">
+    <h3>B+ Trees — The Dynamic Tree Index <span class="slide-ref">Slides 203–207</span></h3>
+    <p>A <span class="hl">B+ tree</span> is like ISAM but self-balancing. Every time you insert or delete, the tree adjusts to maintain balance. The height is always O(log<sub>F</sub> N) where F is the fanout (number of pointers per node) and N is the number of leaf pages.</p>
+
+    <p>Key properties:</p>
+    <ul>
+      <li><strong>Leaf pages</strong>: Contain actual data entries (k* values). They are doubly-linked left↔right for range scans.</li>
+      <li><strong>Non-leaf pages</strong>: Contain only keys to guide search. Each node has pointers between keys: P₀ | K₁ | P₁ | K₂ | P₂ | ... | Kₘ | Pₘ</li>
+      <li><strong>Minimum 50% occupancy</strong>: Each node must be at least half full (except the root). If a node has order d, it holds between d and 2d keys.</li>
+      <li><strong>Fanout</strong>: A typical B+ tree has fanout F ≈ 100–200, meaning 3–4 levels handles 100+ million records!</li>
+    </ul>
+
+    <div class="diagram">B+ Tree Example:
+
+                      Root
+                   ┌──[17]──┐
+                  /           \
+            [5][13]          [24][30]
+           /   |   \         /   |   \
+        [2*3*][5*7*8*][14*16*][19*20*22*][24*27*29*][33*34*38*39*]
+          └───────────────────────────────────────────────┘
+                    Leaves are linked →→→ for range scans</div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Searching</div>
+        <p>Search for 15* in the tree above. Start at root: 15 ≤ 17, go left. Node has 5 and 13. 15 > 13, go right subtree. Arrive at leaf [14* 16*]. Scan: 14 → 15 not there! 15 is NOT in the tree. B+ trees can tell you a record doesn't exist without scanning the whole file.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Range search "all entries ≥ 24"</div>
+        <p>Navigate to leaf containing 24*. Then follow the next-leaf pointers: [24*27*29*] → [33*34*38*39*] → ... Read all leaves from 24 onward in one sequential scan. This is extremely efficient — no backtracking needed.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Practical capacity</div>
+        <p>A B+ tree with order 100 and 67% fill factor has average fanout 133. Height 4: 133⁴ ≈ 312 million records, found in 4 page reads. Height 3: 133³ ≈ 2.3 million records in 3 reads. Plus: level 1 (1 page) and level 2 (133 pages = 1 MB) often fit in RAM — meaning only 1–2 actual disk reads needed for most searches!</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: B+ Insert -->
+  <div class="topic">
+    <h3>Inserting Into a B+ Tree <span class="slide-ref">Slides 208–211</span></h3>
+    <p>Insertion in a B+ tree follows these steps:</p>
+    <ol>
+      <li>Find the correct leaf page L (same as a search).</li>
+      <li>If L has space, insert and done.</li>
+      <li>If L is full: <strong>split</strong> L into two pages (L and L2). Redistribute entries evenly. <strong>Copy up</strong> the middle key into the parent (the middle key stays in both the leaf and the parent).</li>
+      <li>The parent may now be overfull — repeat recursively. If a non-leaf page splits, <strong>push up</strong> (not copy up) the middle key — it moves out of the node and goes only to the parent.</li>
+      <li>If the root splits, a new root is created and the tree height increases by 1.</li>
+    </ol>
+
+    <div class="callout key">
+      <div class="callout-icon">🔑</div>
+      <div class="callout-body">
+        <strong>Copy-up vs Push-up</strong>
+        <p>Leaf split → COPY UP the middle key (it stays in the leaf too, because leaves store data). Non-leaf split → PUSH UP the middle key (it only goes to parent, not kept in either child, because non-leaves only guide searches).</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Simple leaf insertion (no split)</div>
+        <p>Insert 6* into a leaf [5* 7* 8*] with order d=2 (capacity 2d=4). The leaf has 3 entries and can hold 4, so just insert: [5* 6* 7* 8*]. Done. O(log N) just to find the leaf.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Leaf split (inserting 8* from the slides)</div>
+        <p>Insert 8* into a full leaf [2* 3* 5* 7*] (order 2, so max is 4 = full). Split: left half stays [2* 3*], right half [5* 7* 8*]. Middle key (5) is COPIED UP to parent. The parent now has 5 inserted into it and points to both new leaf pages.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Root split increases height</div>
+        <p>After inserting 8*, the root [13 17 24 30] may become overfull. Split the root: left child gets [5 13], right child gets [24 30], middle key (17) PUSHES UP to a new root. The tree grows one level taller. This is how B+ trees grow — always from the top.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: B+ Delete -->
+  <div class="topic">
+    <h3>Deleting From a B+ Tree <span class="slide-ref">Slides 212–216</span></h3>
+    <p>Deletion must maintain the half-full invariant. Steps:</p>
+    <ol>
+      <li>Find leaf L containing the entry, remove it.</li>
+      <li>If L is still at least half-full: done.</li>
+      <li>If L has fewer than d entries (too empty): <strong>try to borrow</strong> from a sibling (same parent). If sibling has extra entries, redistribute and update parent key.</li>
+      <li>If can't borrow: <strong>merge</strong> L with sibling. Pull down the separator key from parent. Delete the merged node from parent. If parent is now too empty, propagate up recursively.</li>
+      <li>If root has only one child, remove root — tree height decreases.</li>
+    </ol>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Easy delete (19*)</div>
+        <p>Delete 19* from leaf [19* 20* 22*] (order 2, so min occupancy is 2). After deletion: [20* 22*] — still 2 entries, still half-full. Done. No structural change needed.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Re-distribution (delete 20*)</div>
+        <p>Delete 20* from [20* 22*] (order 2, min=2). After deletion: [22*] — only 1 entry, below minimum! Check sibling [24* 27* 29*] — it has 3 entries, can spare one. Borrow: move 24* to the left leaf, update the parent key to the new separator (which becomes 24, copied up). Result: [22* 24*] and [27* 29*].</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Merge (delete 24*)</div>
+        <p>Delete 24* from [22* 24*]. After deletion: [22*] — too empty. Check sibling [27* 29*] — also at minimum (2), can't spare. So merge: combine [22*] and [27* 29*] into one leaf [22* 27* 29*]. Pull down the separator from parent. Parent may now be too empty — propagation happens upward. If root shrinks to one child, it's removed and tree height decreases.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Bulk Loading -->
+  <div class="topic">
+    <h3>Bulk Loading — Building a B+ Tree Fast <span class="slide-ref">Slides 217–219</span></h3>
+    <p>Inserting millions of records one at a time into a B+ tree is very slow — each insert traverses the tree and may cause splits. <span class="hl">Bulk loading</span> builds the tree from scratch much faster:</p>
+    <ol>
+      <li><strong>Sort</strong> all data entries by the search key.</li>
+      <li>Fill leaf pages left-to-right from sorted data.</li>
+      <li>Build index pages above, always inserting the first key of each new leaf into the rightmost index page above it.</li>
+      <li>When an index page fills, split it and push up — same as insertion, but only along the rightmost path.</li>
+    </ol>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Why faster?</div>
+        <p>Normal insertion: for 1 million records, each insert reads O(log N) pages. 1,000,000 × 4 reads = 4 million disk reads. Bulk loading: sort once (linear scan), then fill pages sequentially. Almost all writes are sequential — much cheaper. Fewer total page reads/writes.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Sequential leaf pages</div>
+        <p>Bulk loading produces leaves that are stored sequentially on disk. This makes future range scans faster (sequential I/O). Repeated single-row inserts scatter leaf pages all over disk — worse for range scans even if the tree is logically the same.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Fill factor control</div>
+        <p>Bulk loading lets you control how full each leaf is packed ("fill factor"). If you expect many future inserts, set fill factor to 70% — leaving room so future inserts don't immediately cause splits. If the data is read-only, pack to 100% for maximum space efficiency.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 12 — Hash-Based Indexes
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch12">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 12 · Slides 222–240</div>
+    <div>
+      <h2>Hash-Based Indexes</h2>
+      <div class="subtitle">Static Hashing, Extendible Hashing, Linear Hashing</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: Hashing Basics -->
+  <div class="topic">
+    <h3>How Hash Indexes Work <span class="slide-ref">Slides 223–225</span></h3>
+    <p>A <span class="hl">hash-based index</span> uses a <strong>hash function</strong> to map a key to a bucket number. The record is stored in (or pointed to by) that bucket. Lookup is O(1) — find the bucket, check if record is there. <em>No scanning needed.</em></p>
+
+    <p><strong>Critical limitation:</strong> Hash indexes support <em>only equality searches</em> (find WHERE key = 42). They CANNOT support range queries (WHERE key &gt; 42) because related keys are scattered randomly across buckets.</p>
+
+    <div class="diagram">Static Hashing:
+
+  key "Alice" ──→ h("Alice") mod M = bucket 3
+  key "Bob"   ──→ h("Bob")   mod M = bucket 7
+  key "Carol" ──→ h("Carol") mod M = bucket 3  (same bucket as Alice!)
+
+  Bucket 3: [Alice's record | Carol's record | ... ]
+  Bucket 7: [Bob's record | ... ]
+
+  If bucket 3 fills up → overflow page chained on</div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Hash function</div>
+        <p>h(key) = (a × key + b) mod M where M is number of buckets. E.g., M=10, a=3, b=7. Key=5: (3×5+7) mod 10 = 22 mod 10 = 2. Key=15: (3×15+7) mod 10 = 52 mod 10 = 2. Both go to bucket 2 — a <strong>collision</strong>. Good hash functions spread keys evenly to minimize collisions.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Why hashing is great for equality</div>
+        <p>"Find employee with SSN = 123456789." Hash the SSN: h(123456789) = bucket 47. Go directly to bucket 47. Scan the (small) bucket. Done — typically 1–2 disk reads. Compare: full scan of a million-record heap file = thousands of reads.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Why hashing fails for range queries</div>
+        <p>"Find all employees with salary between $50,000 and $60,000." With a hash index on salary, $50,001 hashes to bucket 3, $50,002 to bucket 8, $50,003 to bucket 1... There's no pattern. You must scan ALL buckets — just as bad as a full table scan. Use a B+ tree for ranges!</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Static Hashing Problem -->
+  <div class="topic">
+    <h3>Static Hashing — The Overflow Problem <span class="slide-ref">Slide 225</span></h3>
+    <p>In <span class="hl">static hashing</span>, the number of buckets M is fixed at creation. As more records are inserted, buckets fill up and require <strong>overflow pages</strong> — extra pages chained to the bucket. Long overflow chains slow down searches (you must scan the whole chain).</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Overflow chains grow</div>
+        <p>Bucket capacity: 4 records. Insert 20 records all hashing to bucket 5. Bucket 5 fills at 4, gets overflow page 1 (4 more), overflow page 2 (4 more), overflow page 3 (4 more), overflow page 4 (4 more). Now finding any record in bucket 5 requires reading 5 pages — as slow as a small scan.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Why not just increase M?</div>
+        <p>Doubling M to fix overflow means reading and rehashing ALL records into new bucket locations. This is a massive operation on a live database. For a 100 GB database, it's impractical to do this every time performance degrades.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Skewed data makes it worse</div>
+        <p>If your data is skewed (e.g., 90% of employees are in department 3), then h(dept=3) always hits one bucket while others are nearly empty. Static hashing can't adapt to this. Dynamic hashing methods (extendible, linear) solve this.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Extendible Hashing -->
+  <div class="topic">
+    <h3>Extendible Hashing — Smart Dynamic Hashing <span class="slide-ref">Slides 226–231</span></h3>
+    <p><span class="hl">Extendible Hashing</span> avoids the overflow chain problem by using a <strong>directory</strong> of pointers to buckets. When a bucket overflows, you split only that one bucket (not the whole file). If necessary, the directory doubles in size — but since the directory is much smaller than the data, this is cheap.</p>
+
+    <p>The trick: use the last <em>global depth</em> bits of h(key) to index into the directory. Each bucket has a <em>local depth</em> — how many bits are used to distinguish records in that bucket.</p>
+
+    <div class="callout info">
+      <div class="callout-icon">📖</div>
+      <div class="callout-body">
+        <strong>Global Depth vs Local Depth</strong>
+        <p><strong>Global depth</strong>: how many bits the directory currently uses. Directory has 2^(global depth) entries. <strong>Local depth</strong>: how many bits are used to decide if a record goes into this specific bucket. When local depth = global depth and a bucket splits, the directory must double.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Basic lookup</div>
+        <p>Global depth = 2. Directory has 4 entries (00, 01, 10, 11). To find a record with h(key) = 5 = binary 101: take last 2 bits = "01". Directory entry 01 points to Bucket B. Scan Bucket B for the record. Total: 1 directory lookup + 1 bucket read.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Insert causing bucket split (no directory doubling)</div>
+        <p>Insert h(r)=20 (binary 10100). Last 2 bits = "00" → Bucket A. Bucket A is full. Split Bucket A into A (keeps records ending in 000) and A2 (records ending in 100). Local depth of A and A2 increases to 3. Now directory entry "100" points to A2, "000" still to A. If global depth was 2, we need 3 bits → directory doubles from 4 to 8 entries.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Why least significant bits?</div>
+        <p>Using least significant bits lets directory doubling work by simple copying. Old directory: [00→B0, 01→B1, 10→B2, 11→B3]. New directory (doubled): [000→B0, 001→B1, 010→B2, 011→B3, 100→B0, 101→B1, 110→B2, 111→B3]. The second half is just a copy of the first — each new entry points to the same bucket as its "lower half" counterpart. Super efficient!</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Linear Hashing -->
+  <div class="topic">
+    <h3>Linear Hashing — Hashing Without a Directory <span class="slide-ref">Slides 232–237</span></h3>
+    <p><span class="hl">Linear Hashing</span> is another dynamic hashing approach, but it avoids the directory entirely. Instead, it uses overflow pages and splits buckets in a fixed round-robin order. This prevents long overflow chains from developing systematically.</p>
+
+    <p>Key ideas:</p>
+    <ul>
+      <li>Use a family of hash functions h₀, h₁, h₂, ... where hᵢ(key) = h(key) mod (2ⁱ × N)</li>
+      <li>N = initial number of buckets. Each "round" doubles the effective number of buckets.</li>
+      <li>A pointer <strong>Next</strong> tracks which bucket to split next (always sequential).</li>
+      <li>When searching, apply hLevel(key). If result is before Next, also try hLevel+1 (the split image bucket).</li>
+    </ul>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Search in Linear Hashing</div>
+        <p>Level=0, N=4, Next=1. Search for key with h(key)=5. h₀(5) = 5 mod 4 = 1. Is 1 ≥ Next(=1)? Yes — bucket hasn't been split yet in this round. But wait: 1 = Next means it's exactly the next to split. Check: if bucket 1 has been split, use h₁(5) = 5 mod 8 = 5. Otherwise use bucket 1. The exact rule: if h₀(r) < Next, use h₁; else use h₀.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Overflow handling</div>
+        <p>A bucket overflows → add overflow page AND split the Next bucket (which may not be the overflowing one). This keeps overflow chains short across the whole structure, because splits happen evenly (round-robin), not concentrated on "hot" buckets.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — LH vs Extendible Hashing</div>
+        <p>Extendible Hashing: no overflow pages, directory can grow large for skewed data. Linear Hashing: no directory (saves memory), short overflow chains, handles duplicates easily. But LH splits may be wasteful (splitting a non-full bucket). In practice, both work well — LH is simpler to implement without a directory structure.</p>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <h4>📊 Hash Index Summary</h4>
+      <ul>
+        <li>Hash indexes: ONLY for equality searches (WHERE key = value). Cannot do range queries.</li>
+        <li>Static hashing: fixed buckets, overflow chains can grow → performance degrades.</li>
+        <li>Extendible hashing: directory of pointers, splits one bucket at a time, doubles directory occasionally. Fast equality lookup (1–2 disk reads if directory fits in RAM).</li>
+        <li>Linear hashing: no directory, splits round-robin, short overflow chains. Handles duplicates. Simpler but potentially lower space utilization.</li>
+        <li>For range queries: always use B+ tree.</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CHAPTER 13 — Transaction Management
+═══════════════════════════════════════════════════ -->
+<section class="chapter" id="ch13">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 13 · Slides 241–263</div>
+    <div>
+      <h2>Transaction Management</h2>
+      <div class="subtitle">ACID, Concurrency, Locks, Logging, Recovery</div>
+    </div>
+  </div>
+
+  <!-- TOPIC: Transactions -->
+  <div class="topic">
+    <h3>What Is a Transaction? <span class="slide-ref">Slides 242–244</span></h3>
+    <p>A <span class="hl">transaction (Xact)</span> is the database's view of a user program: a sequence of reads and writes. From the database's perspective, it doesn't matter that you wrote 10,000 lines of Python — it only sees "read A, write A, read B, write B..."</p>
+
+    <p>Why do we need transactions? Because multiple users access the database at the same time (<strong>concurrency</strong>), and crashes can happen at any moment. Transactions give us guarantees about what happens in these scary situations.</p>
+
+    <div class="callout key">
+      <div class="callout-icon">🏦</div>
+      <div class="callout-body">
+        <strong>Classic Example: Bank Transfer</strong>
+        <p>T1: Transfer $100 from account B to account A: A = A + 100, B = B - 100.<br>
+        T2: Apply 6% interest to both: A = 1.06 × A, B = 1.06 × B.<br>
+        Both run at the same time. What could go wrong?</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Why concurrency is essential</div>
+        <p>A bank processes 10,000 transactions per second. If each transaction ran one at a time, and each takes 10ms (disk reads), you'd process 100/second — far too slow. Concurrency (interleaving many transactions) keeps the CPU and disk busy, achieving much higher throughput.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — The DBMS only sees reads and writes</div>
+        <p>Your code: "calculate interest, adjust for inflation, apply penalty fee, check fraud rules, update balance." The DBMS only sees: R(A), W(A), R(B), W(B). All the business logic is invisible to the DBMS — it just manages the read/write sequence safely.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Consistent state</div>
+        <p>"The total money in the bank must always be the same after a transfer." This is a consistency rule. Each transaction must take the database from one consistent state to another. If T1 adds $100 to A and subtracts $100 from B — before or after, total money is the same. Halfway through T1 (A added but B not yet subtracted), the database is temporarily inconsistent — that's allowed during a transaction, but must be fixed by the end.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: ACID -->
+  <div class="topic">
+    <h3>Atomicity — All or Nothing <span class="slide-ref">Slide 245</span></h3>
+    <p><span class="hl">Atomicity</span> is the guarantee that a transaction either completes ALL its steps, or it completes NONE of them. There's no "halfway done" from the outside world's perspective. If the system crashes while T1 is in progress, all of T1's changes are rolled back as if T1 never happened.</p>
+    <p>How? The DBMS maintains a <strong>log</strong> of every write. If a crash occurs, the log lets it undo incomplete transactions.</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Bank transfer atomicity</div>
+        <p>T1: A=A+100, B=B-100. If the system crashes after A is updated but before B is updated — A has $100 extra but B hasn't lost $100. Money was "created from nothing"! Atomicity prevents this: the crash-recovery system sees T1 was incomplete, rolls back A to its original value. As if T1 never ran.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Commit vs Abort</div>
+        <p>A transaction <strong>commits</strong> when all steps are done and changes are permanent. It <strong>aborts</strong> (is rolled back) when something goes wrong. Once committed, changes survive even a crash. An aborted transaction leaves no trace. From a user's view, every transaction is atomic — either it ran completely, or it didn't run at all.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Online shopping analogy</div>
+        <p>You order a product online. The transaction: (1) reserve item in inventory, (2) charge your card, (3) create shipping label. If step 2 (charge) fails, the system must un-reserve the item (rollback step 1) — atomicity. You can't end up with an item reserved and your card not charged, or vice versa.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Serializable schedules -->
+  <div class="topic">
+    <h3>Serializability — Correct Concurrency <span class="slide-ref">Slides 247–248</span></h3>
+    <p>When multiple transactions run concurrently, their operations are <em>interleaved</em>. A <span class="hl">schedule</span> defines the order of all operations from all transactions. There are three kinds:</p>
+    <ul>
+      <li><strong>Serial schedule</strong>: T1 runs completely, then T2 runs completely. No interleaving. Always correct but slow.</li>
+      <li><strong>Serializable schedule</strong>: An interleaved schedule that produces the SAME result as some serial execution. This is the goal!</li>
+      <li><strong>Non-serializable schedule</strong>: The interleaving produces a result that no serial execution would produce. This is a bug.</li>
+    </ul>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Good interleaving (serializable)</div>
+        <p>T1: A=A+100, [gap], B=B-100.<br>
+        T2: [gap], A=1.06×A, [gap], B=1.06×B.<br>
+        Order: T1:R(A), T1:W(A), T2:R(A), T2:W(A), T1:R(B), T1:W(B), T2:R(B), T2:W(B).<br>
+        This is equivalent to running T1 then T2 serially. ✓ Serializable.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Bad interleaving (not serializable)</div>
+        <p>T1: A=A+100, [gap], B=B-100.<br>
+        T2: [gap], A=1.06×A, B=1.06×B.<br>
+        Order: T1:W(A), T2:W(A), T2:W(B), T1:W(B).<br>
+        T2 applies interest to A, then T1 overwrites it! T2's interest on A is lost. This result can't happen in any serial order. ✗ Not serializable.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Why serializability is the goal</div>
+        <p>If every transaction is correct when run alone, then any serializable schedule is also correct — because it's equivalent to running them one at a time. The DBMS doesn't need to understand the business logic; it just ensures the schedule is serializable, and correctness follows automatically.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Anomalies -->
+  <div class="topic">
+    <h3>Three Concurrency Anomalies <span class="slide-ref">Slides 249–250</span></h3>
+    <p>When transactions interleave incorrectly, three types of anomalies can occur based on the conflict type:</p>
+
+    <table class="compare-table">
+      <tr><th>Anomaly</th><th>Conflict</th><th>What Happens</th><th>Example</th></tr>
+      <tr>
+        <td><strong>Dirty Read</strong></td>
+        <td>WR (Write-Read)</td>
+        <td>T2 reads data written by T1, but T1 aborts. T2 used data that never officially existed.</td>
+        <td>T1 writes A=200, T2 reads A=200, T1 ABORTS (A goes back to 100). T2 made a decision based on a phantom value.</td>
+      </tr>
+      <tr>
+        <td><strong>Unrepeatable Read</strong></td>
+        <td>RW (Read-Write)</td>
+        <td>T1 reads A, T2 modifies A, T1 reads A again and gets a different value.</td>
+        <td>T1 reads salary=5000. T2 gives raise, salary=6000, commits. T1 reads salary again: 6000! The same read returned two different values within one transaction.</td>
+      </tr>
+      <tr>
+        <td><strong>Overwriting Uncommitted Data</strong></td>
+        <td>WW (Write-Write)</td>
+        <td>T1 writes A, T2 overwrites A before T1 commits or aborts.</td>
+        <td>T1 sets A=100 (not committed). T2 sets A=200 (commits). T1 aborts → rolls back A. But what value? A was 200 when T1 "rolled back" — T2's committed write is lost!</td>
+      </tr>
+    </table>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Dirty read in real life</div>
+        <p>An airline reservation system: T1 tentatively books seat 12A (writes "reserved"). T2 reads the seat list, sees 12A is reserved, and shows the flight as full to another customer. T1 then aborts (payment failed). Seat 12A is actually free, but T2 gave wrong info. The customer might have bought a more expensive flight unnecessarily.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Unrepeatable read</div>
+        <p>T1 is generating a report: reads total inventory = 1000 units. Meanwhile T2 sells 200 units and commits. T1 reads total inventory again (for verification): gets 800. The report has inconsistent numbers — 1000 in one place, 800 in another, for the "same" moment in time.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — WW conflict</div>
+        <p>T1 sets an employee's salary to $80,000. T2 (a bulk raise) sets it to $84,000 and commits. T1 aborts — rolls back salary. The rollback restores the "before T1" value, which might overwrite T2's committed $84,000 raise! T2's committed change is silently lost.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Locking -->
+  <div class="topic">
+    <h3>Strict Two-Phase Locking (Strict 2PL) <span class="slide-ref">Slide 251</span></h3>
+    <p><span class="hl">Strict 2PL</span> is the most common protocol for preventing all three anomalies. The rules:</p>
+    <ol>
+      <li>Before <strong>reading</strong> an object, acquire a <strong>S (shared) lock</strong>. Multiple transactions can hold S locks on the same object simultaneously — they're just reading, no conflict.</li>
+      <li>Before <strong>writing</strong> an object, acquire an <strong>X (exclusive) lock</strong>. Only one transaction can hold an X lock. If any other transaction holds ANY lock (S or X), you must wait.</li>
+      <li>All locks are held until the transaction <strong>commits or aborts</strong> — never released early. This is the "strict" part.</li>
+    </ol>
+
+    <p>Strict 2PL guarantees that only serializable schedules are produced.</p>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — S locks (readers don't block readers)</div>
+        <p>T1 reads account A (acquires S lock on A). T2 also wants to read A — no problem! S locks are compatible with S locks. Both read A simultaneously. But T3 wants to write A — T3 requests X lock on A, which is blocked until T1 and T2 both release their S locks (i.e., commit).</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — X lock prevents dirty reads</div>
+        <p>T1 writes A (holds X lock on A). T2 wants to read A — requests S lock — blocked! T2 must wait until T1 commits or aborts. This prevents T2 from reading T1's uncommitted (possibly wrong) value. Dirty reads eliminated.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Cascading aborts prevented</div>
+        <p>Without strict (holding locks until commit): T1 writes A, releases lock. T2 reads A (T1's uncommitted value), releases lock. T3 reads A (T1's uncommitted value). T1 aborts. Now T2 and T3 have used data that was rolled back — they might also need to abort. This "cascade" is expensive. Strict 2PL prevents it: no one can read T1's value until T1 commits.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: Logging -->
+  <div class="topic">
+    <h3>The Log — How Aborts &amp; Crashes Are Handled <span class="slide-ref">Slides 252–253</span></h3>
+    <p>The <span class="hl">log</span> (also called the write-ahead log or WAL) is a sequential file that records every change made to the database. Before any change is written to the actual database, the log record is written first — hence "write-ahead."</p>
+
+    <p>Every log record for a write contains:</p>
+    <ul>
+      <li>Transaction ID</li>
+      <li>Which object was changed</li>
+      <li><strong>Before image</strong>: the old value (for undo)</li>
+      <li><strong>After image</strong>: the new value (for redo)</li>
+    </ul>
+
+    <div class="callout warn">
+      <div class="callout-icon">📝</div>
+      <div class="callout-body">
+        <strong>WAL Rule: Log must go to disk BEFORE the changed page</strong>
+        <p>If the database page is written to disk but the log isn't, and a crash occurs — you can't undo the change. The log record must always be on disk first, so recovery can always undo uncommitted changes.</p>
+      </div>
+    </div>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Log for a bank transfer</div>
+        <p>T1 does A=A+100. Log entry: [T1, object=A, before=500, after=600]. Then T1 does B=B-100. Log entry: [T1, object=B, before=300, after=200]. Then T1 commits: [T1, COMMIT]. The log is a complete audit trail of every change.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Using the log to abort</div>
+        <p>T1 partially runs (wrote A, hasn't written B yet), then user cancels. The DBMS reads T1's log entries backward: finds [T1, A, before=500, after=600] → restores A to 500. T1's effects are completely erased. The log records are chained by transaction ID so the DBMS can find all of T1's entries efficiently.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Duplexed log</div>
+        <p>The log is often written to two different disk drives simultaneously (duplexed). If one disk fails, the other has the complete log. This ensures that even hardware failures don't prevent recovery. The log is the most critical file in a database system.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- TOPIC: ARIES Recovery -->
+  <div class="topic">
+    <h3>Crash Recovery — The ARIES Algorithm <span class="slide-ref">Slide 254</span></h3>
+    <p>When the database crashes (power failure, OS crash, etc.) and restarts, it must restore a consistent state. The <span class="hl">ARIES algorithm</span> does this in three phases:</p>
+
+    <table class="compare-table">
+      <tr><th>Phase</th><th>What It Does</th><th>Direction</th></tr>
+      <tr>
+        <td><strong>1. Analysis</strong></td>
+        <td>Scan the log forward from the last checkpoint. Identify which transactions were active at crash time, and which database pages were "dirty" (changed but not yet written to disk).</td>
+        <td>Forward →</td>
+      </tr>
+      <tr>
+        <td><strong>2. Redo</strong></td>
+        <td>Redo ALL logged updates, even those from transactions that aborted. This ensures the database is in the exact state it was at the moment of crash (all changes replayed).</td>
+        <td>Forward →</td>
+      </tr>
+      <tr>
+        <td><strong>3. Undo</strong></td>
+        <td>Undo all changes by transactions that were still active (had not committed) at the time of the crash. Restores the "before" values from the log.</td>
+        <td>Backward ←</td>
+      </tr>
+    </table>
+
+    <div class="examples">
+      <div class="examples-title">Examples</div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 1 — Why Redo before Undo?</div>
+        <p>At crash time, some committed changes might not have been flushed to disk yet (they were in the buffer pool). Redo ensures ALL committed changes are on disk. Then Undo removes uncommitted changes. If you did Undo first, you might undo changes that were from committed transactions not yet on disk.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 2 — Analysis phase</div>
+        <p>Checkpoint was at time T=100. Crash at T=200. Analysis scans the log from T=100 to T=200. Finds: T1 committed at T=150 (safe), T2 was still active at T=200 (must undo), T3 wrote pages 5 and 7 (dirty pages, may need redo). After analysis, the recovery system knows exactly what work to do.</p>
+      </div>
+      <div class="example-card">
+        <div class="ex-num">EXAMPLE 3 — Crash during recovery</div>
+        <p>What if the system crashes AGAIN while recovery is running? ARIES handles this gracefully. Because Redo replays all logged actions (idempotent), running Redo again doesn't cause double-application problems. And Undo records its own "compensation log records" (CLRs) so it knows where to resume if interrupted. Recovery is restart-safe.</p>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <h4>🔒 Transaction Management Summary</h4>
+      <ul>
+        <li><strong>Transaction</strong>: A sequence of reads/writes treated as one atomic unit.</li>
+        <li><strong>Atomicity</strong>: All or nothing — no partial transactions visible.</li>
+        <li><strong>Serializable schedule</strong>: Concurrent execution that produces the same result as some serial execution. The correctness criterion.</li>
+        <li><strong>Three anomalies</strong>: Dirty Read (WR), Unrepeatable Read (RW), Lost Update (WW). All prevented by Strict 2PL.</li>
+        <li><strong>Strict 2PL</strong>: S locks for reads, X locks for writes. Hold ALL locks until commit/abort. Guarantees serializability and avoids cascading aborts.</li>
+        <li><strong>Write-Ahead Logging (WAL)</strong>: Log record goes to disk before the changed page. Enables undo (abort) and redo (crash recovery).</li>
+        <li><strong>ARIES</strong>: Analysis (find dirty pages and active transactions) → Redo (replay everything) → Undo (rollback uncommitted transactions). The standard crash recovery algorithm.</li>
+      </ul>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <p>CS281 — Computers &amp; Data Organization · Bilkent University · Dr. Mustafa Değerli</p>
+  <p style="margin-top:8px; font-size:12px;">Study guide covering slides 145–263: Schema Refinement (Ch.9), Storage &amp; Indexing (Ch.8), Tree Indexes (Ch.9), Hash Indexes (Ch.11), Transaction Management (Ch.16)</p>
+</footer>
+
+</body>
+</html>
